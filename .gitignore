@@ -1,0 +1,5 @@
+.idea
+botinfo.py
+Lib/site-packages/
+Scripts/Bot/__pycache__/
+Scripts/__pycache__/
