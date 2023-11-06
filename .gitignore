@@ -3,3 +3,10 @@ botinfo.py
 Lib/site-packages/
 Scripts/Bot/__pycache__/
 Scripts/__pycache__/
+*.ps1
+*.cfg
+*.bat
+*.nu
+*.exe
+*.fish
+activate
