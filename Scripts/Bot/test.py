@@ -1,5 +1,6 @@
 import botinfo
 
+
 async def send_message(content, channel):
     await channel.send(content)
 
