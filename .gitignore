@@ -10,3 +10,4 @@ Scripts/__pycache__/
 *.exe
 *.fish
 activate
+activate_this.py
