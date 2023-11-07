@@ -8,7 +8,7 @@ class Timer():
         self.result_func = result_func
         self.is_ticking = False
 
-    def start_timer(self):
+    async def start_timer(self):
         self.is_ticking = True
         while self.is_ticking:
             time.sleep(1)
@@ -16,7 +16,7 @@ class Timer():
             self.current_seconds -= 1
             if self.current_seconds <= 0:
                 self.is_ticking = False
-                self.result_func(self.channel.id)
+                await self.result_func(self.channel)
 
     def stop_timer(self):
         self.is_ticking = False
