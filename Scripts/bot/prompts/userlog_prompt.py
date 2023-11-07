@@ -1,8 +1,9 @@
 class UserlogPrompt():
-    def __init__(self, author, guild, channel, start_condition, exit_func):
+    def __init__(self, author, guild, channel, prompt_type, start_condition, exit_func):
         self.author = author
         self.guild = guild
         self.channel = channel
+        self.prompt_type = prompt_type
         self.exit_func = exit_func
         self.requested_responses = []
         if (start_condition == "enabled"):

@@ -32,9 +32,9 @@ async def on_message(message):
 
     prompt = prompt_handler.find_prompt(message.channel.id)
     if prompt is not None:
-        await message.channel.send("found active prompt in this channel")
+        #await message.channel.send("found active prompt in this channel")
         if prompt.author == message.author:
-            await message.channel.send("message author is the same as prompt author")
+            #await message.channel.send("message author is the same as prompt author")
             await prompt_handler.process_satisfaction(message)
 
     server_prefix = guildprefs.get_guild_pref((message.guild.id), "prefix")

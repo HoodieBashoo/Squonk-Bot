@@ -7,6 +7,18 @@ from prompts.userlog_prompt import UserlogPrompt
 active_prompts = []
 
 async def start_prompt(author, guild, channel, prompt_type, start_condition):
+    if find_prompt(channel.id) is not None:
+        await channel.send("Another prompt is already running in this channel")
+        return
+
+    guild_prompts = find_prompts(guild.id)
+    if guild_prompts is not None:
+        if len(guild_prompts) > 0:
+            for prompt in guild_prompts:
+                if prompt.prompt_type == prompt_type:
+                    await channel.send(f"A {prompt_type} prompt is already running in this server")
+                    return
+
     new_prompt = await create_prompt(author, guild, channel, prompt_type, start_condition, end_prompt)
 
 def find_prompt(channel_id):
@@ -16,6 +28,16 @@ def find_prompt(channel_id):
     for prompt in active_prompts:
         if prompt.channel.id == channel_id:
             return prompt
+
+def find_prompts(guild_id):
+    if len(active_prompts) <= 0:
+        return
+
+    guild_prompts = []
+    for prompt in active_prompts:
+        if prompt.guild.id == guild_id:
+            guild_prompts.append(prompt)
+    return guild_prompts
 
 async def process_satisfaction(message):
     channel_id = message.channel.id
@@ -37,7 +59,7 @@ def get_prompt_data(prompt_type, prompt, answer):
 async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func):
     match prompt_type:
         case "userlog":
-            prompt = UserlogPrompt(author, guild, channel, start_condition, exit_func)
+            prompt = UserlogPrompt(author, guild, channel, prompt_type, start_condition, exit_func)
             active_prompts.append(prompt)
             await prompt.next_state("")
 
