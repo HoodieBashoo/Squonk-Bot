@@ -1,9 +1,10 @@
 class UserlogPrompt():
-    def __init__(self, author, guild, channel, prompt_type, start_condition, exit_func):
+    def __init__(self, author, guild, channel, prompt_type, start_condition, exit_func, timer):
         self.author = author
         self.guild = guild
         self.channel = channel
         self.prompt_type = prompt_type
+        self.timer = timer
         self.exit_func = exit_func
         self.requested_responses = []
         if (start_condition == "enabled"):
@@ -15,6 +16,7 @@ class UserlogPrompt():
         if response == "cancel":
             await self.exit_func(self.channel)
 
+        successful = False
         currentState = self.state
         match currentState:
             # PURPOSE: USERLOG NOT YET ENABLED
@@ -26,7 +28,8 @@ class UserlogPrompt():
                 if response == self.requested_responses[0]:
                     self.requested_responses = []
                     self.state = 2
-                    await self.channel.send("gtfih with a channel ID jimmy")
+                    await self.channel.send("gtfo in here with a channel ID jimmy")
+                    successful = True
                 elif response == self.requested_responses[1]:
                     await self.exit_func(self.channel)
             case 2:
@@ -42,7 +45,12 @@ class UserlogPrompt():
                     self.requested_responses = []
                     self.state = 2
                     await self.channel.send("gtfih with a new channel ID jimmy")
+                    successful = True
                 elif response == self.requested_responses[1]:
                     #guildprefs log_channel: 0
                     #guildprefs userlog: False
                     await self.exit_func(self.channel)
+
+        if successful:
+            print("resetting timer")
+            timer.reset_timer()

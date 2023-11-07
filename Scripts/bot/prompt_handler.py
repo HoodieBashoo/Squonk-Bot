@@ -2,9 +2,14 @@ from typing import NamedTuple
 
 import prompts
 from prompts.userlog_prompt import UserlogPrompt
+from timer import Timer
 
 
 active_prompts = []
+#timers = {}
+
+def reset():
+    active_prompts = []
 
 async def start_prompt(author, guild, channel, prompt_type, start_condition):
     if find_prompt(channel.id) is not None:
@@ -19,7 +24,9 @@ async def start_prompt(author, guild, channel, prompt_type, start_condition):
                     await channel.send(f"A {prompt_type} prompt is already running in this server")
                     return
 
-    new_prompt = await create_prompt(author, guild, channel, prompt_type, start_condition, end_prompt)
+    new_timer = Timer(30, channel, end_prompt)
+    #timers[channel.id] = new_timer
+    new_prompt = await create_prompt(author, guild, channel, prompt_type, start_condition, end_prompt, new_timer)
 
 def find_prompt(channel_id):
     if len(active_prompts) <= 0:
@@ -47,7 +54,11 @@ async def process_satisfaction(message):
 async def end_prompt(channel):
     channel_id = channel.id
     prompt = find_prompt(channel_id)
+
+    prompt.timer.stop_timer()
     active_prompts.remove(prompt)
+    #timers[channel.id].stop_timer()
+    #timers.pop(channel.id, None)
     await channel.send("Prompt ended")
 
 def get_prompt_data(prompt_type, prompt, answer):
@@ -56,10 +67,11 @@ def get_prompt_data(prompt_type, prompt, answer):
             message, responses = userlog_prompt.get_prompt_data(prompt.prompt_state)
             return message, responses
 
-async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func):
+async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func, timer):
     match prompt_type:
         case "userlog":
-            prompt = UserlogPrompt(author, guild, channel, prompt_type, start_condition, exit_func)
+            prompt = UserlogPrompt(author, guild, channel, prompt_type, start_condition, exit_func, timer)
+            timer.start_timer()
             active_prompts.append(prompt)
             await prompt.next_state("")
 

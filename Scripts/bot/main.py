@@ -12,7 +12,7 @@ client = discord.Client(intents=intents)
 async def on_ready():
     for guild in client.guilds:
         guildprefs.initialize_guild(guild.id)
-
+    prompt_handler.reset()
     print("client ready!")
 
 @client.event
