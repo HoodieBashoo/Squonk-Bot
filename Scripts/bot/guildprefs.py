@@ -1,5 +1,7 @@
-import os
+import os.path
 import json
+from pathlib import Path
+
 from botinfo import guild_data_path
 
 
@@ -11,8 +13,11 @@ default_prefs = {
 
 def initialize_guild(guild_id):
     full_path = get_full_path(guild_id)
-    with open(full_path, "w") as file:
-        json.dump(default_prefs, file, indent=4)
+    if os.path.isfile(full_path):
+        print(f"{guild_id}.json has already been created!")
+    else:
+        with open(full_path, "w") as file:
+            json.dump(default_prefs, file, indent=4)
 
 def edit_guild_pref(guild_id, preference, new_data):
     full_path = get_full_path(guild_id)
