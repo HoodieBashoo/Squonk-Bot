@@ -2,11 +2,15 @@ from typing import NamedTuple
 
 import prompts
 from prompts.userlog_prompt import UserlogPrompt
+from timer import Timer
 
 active_prompts = []
+prompt_time = 5
 
 def reset():
     active_prompts = []
+
+# TODO: Add a timer so that prompts end after 30 seconds of inactivity
 
 async def start_prompt(author, guild, channel, prompt_type, start_condition):
     if find_prompt(channel.id) is not None:
@@ -51,7 +55,7 @@ async def end_prompt(channel):
     prompt = find_prompt(channel_id)
 
     active_prompts.remove(prompt)
-    await channel.send("Prompt ended")
+    #await channel.send("Prompt ended")
 
 def get_prompt_data(prompt_type, prompt, answer):
     match prompt_type:
@@ -62,14 +66,7 @@ def get_prompt_data(prompt_type, prompt, answer):
 async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func):
     match prompt_type:
         case "userlog":
-            prompt = UserlogPrompt(author, guild, channel, prompt_type, start_condition, exit_func)
+            timer = Timer(prompt_time, channel, exit_func)
+            prompt = UserlogPrompt(author, guild, channel, prompt_type, timer, start_condition, exit_func)
             active_prompts.append(prompt)
             await prompt.next_state("")
-
-def debug_prompts():
-    channel_id = 123123
-    start_prompt(channel_id, "userlog")
-    prompt = find_prompt(channel_id)
-    prompt.exit_func(channel_id)
-
-#debug_prompts()

@@ -3,6 +3,7 @@ botinfo.py
 Lib/site-packages/
 Scripts/Bot/__pycache__/
 Scripts/__pycache__/
+/guild-data/
 *.ps1
 *.cfg
 *.bat
