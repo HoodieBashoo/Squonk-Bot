@@ -1,2 +1,2 @@
-import prompts.userlog_prompt
-import prompts.prompt_enums
+from prompts.userlog_prompt import UserlogPrompt
+from prompts.help_prompt import HelpPrompt

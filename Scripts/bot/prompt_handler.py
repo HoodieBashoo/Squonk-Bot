@@ -1,7 +1,8 @@
 from typing import NamedTuple
 
-import prompts
-from prompts.userlog_prompt import UserlogPrompt
+from prompts import *
+#from prompts.userlog_prompt import UserlogPrompt
+#from prompts.help_prompt import HelpPrompt
 from timer import Timer
 
 active_prompts = []
@@ -64,9 +65,17 @@ def get_prompt_data(prompt_type, prompt, answer):
             return message, responses
 
 async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func):
+    timer = Timer(prompt_time, channel, exit_func)
+    prompt = None
+
     match prompt_type:
         case "userlog":
-            timer = Timer(prompt_time, channel, exit_func)
-            prompt = UserlogPrompt(author, guild, channel, prompt_type, timer, start_condition, exit_func)
-            active_prompts.append(prompt)
-            await prompt.next_state("")
+            prompt = UserlogPrompt(author, guild, channel, timer, start_condition, exit_func)
+        case "help":
+            prompt = HelpPrompt(author, guild, channel, timer, exit_func)
+
+    if prompt is not None:
+        active_prompts.append(prompt)
+        await prompt.next_state("")
+    else:
+        await channel.send("Error creating prompt")

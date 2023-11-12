@@ -45,7 +45,7 @@ async def on_message(message):
     if message.author.id == client.user.id:
         return
     if client.user.mentioned_in(message):
-        await message.channel.send(botinfo.description + f" My prefix is {guildprefs.get_guild_pref(message.guild.id, 'prefix')}")
+        await message.channel.send(botinfo.description + f" My prefix is `{guildprefs.get_guild_pref(message.guild.id, 'prefix')}`")
         return
 
     prompt = prompt_handler.find_prompt(message.channel.id)

@@ -11,17 +11,17 @@ async def member_left(member):
     channel = get_channel_if_valid_from_member(member)
     if channel is not None:
         # TODO: Add random hate message after the period
-        await channel.send(f"{member.global_name} has left the chat.")
+        await channel.send(f"{member.name} has left the chat.")
 
 async def member_banned(guild, member):
     channel = get_channel_if_valid_from_guild(guild)
     if channel is not None:
-        await channel.send(f"{member.global_name} has been banned.")
+        await channel.send(f"{member.name} has been banned.")
 
 async def member_unbanned(guild, member):
     channel = get_channel_if_valid_from_guild(guild)
     if channel is not None:
-        await channel.send(f"{member.global_name} has been unbanned.")
+        await channel.send(f"{member.name} has been unbanned.")
 
 def get_channel_if_valid_from_guild(guild):
     if guildprefs.get_guild_pref(guild.id, "userlog"):

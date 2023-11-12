@@ -4,11 +4,10 @@ sys.path.append("..")
 import guildprefs
 
 class UserlogPrompt():
-    def __init__(self, author, guild, channel, prompt_type, timer, start_condition, exit_func):
+    def __init__(self, author, guild, channel, timer, start_condition, exit_func):
         self.author = author
         self.guild = guild
         self.channel = channel
-        self.prompt_type = prompt_type
         self.timer = timer
         self.exit_func = exit_func
         self.requested_responses = []

@@ -25,11 +25,15 @@ async def utility_commands(client, message, command, parameter):
     match command:
         case "shutdown":
             await commands.utility.shutdown(client, message)
+        case "help":
+            await commands.utility.help(message, parameter)
 
 async def config_commands(client, message, command, parameter):
     # TODO: Add a permission system for specific commands,
     #  config commands are manually disabled for other users rn
     match command:
+        case "prefix":
+            await commands.config.update_prefix(message, parameter, message.channel)
         case "updateprefix":
             await commands.config.update_prefix(message, parameter, message.channel)
         case "userlog":
