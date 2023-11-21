@@ -49,7 +49,7 @@ def find_prompts(guild_id):
 async def process_satisfaction(message):
     channel_id = message.channel.id
     prompt = find_prompt(channel_id)
-    await prompt.next_state(message.content)
+    await prompt.next_state(message.content.lower())
 
 async def end_prompt(channel):
     channel_id = channel.id

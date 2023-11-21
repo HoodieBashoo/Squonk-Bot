@@ -1,9 +1,10 @@
 .idea
 botinfo.py
-Lib/site-packages/
-Scripts/Bot/__pycache__/
-Scripts/__pycache__/
-/guild-data/
+Lib/
+Include/
+guild-data/
+**/__pycache__/
+bin/
 *.ps1
 *.cfg
 *.bat

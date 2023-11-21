@@ -1,5 +1,7 @@
 import discord
 
+from prompts import prompt_urls
+
 
 def all_embeds():
     embeds = [
@@ -20,7 +22,7 @@ def config_embed():
                     "0 Arguments",
         colour=discord.Colour.orange()
     )
-    embed.set_thumbnail(url="https://clipground.com/images/12-tooth-gear-clipart-4.png")
+    embed.set_thumbnail(url=prompt_urls.config_icon)
     return embed
 
 def utility_embed():
@@ -36,5 +38,5 @@ def utility_embed():
                     "0 Arguments",
         colour=discord.Colour.orange()
     )
-    embed.set_thumbnail(url="https://clipart-library.com/images_k/hammer-silhouette/hammer-silhouette-19.png")
+    embed.set_thumbnail(url=prompt_urls.utility_icon)
     return embed
