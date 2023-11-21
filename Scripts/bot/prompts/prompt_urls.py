@@ -1,2 +1,2 @@
-config_icon = "https://cdn.discordapp.com/attachments/298915467551309824/1176627195976888411/20231121_145601.jpg?ex=656f8e78&is=655d1978&hm=fdf79b64cd3357d2d216b90ff0e79dacad29494148992b47675aaf5e46ce6dd7&"
+config_icon = "https://cdn.discordapp.com/attachments/384064317722722305/1176579447101607936/Config.png?ex=656f61ff&is=655cecff&hm=6051cb3422ec8c19bc07c644393be4dd3d2a42e320731e53ddf8adb6ea401fab&"
 utility_icon = "https://cdn.discordapp.com/attachments/384064317722722305/1176579467464937492/Settings.png?ex=656f6204&is=655ced04&hm=971520842a0c2b48ed201f36bb946f6d627240116b8cae303abcece0f94b32f3&"
