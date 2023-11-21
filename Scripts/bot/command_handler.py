@@ -27,6 +27,8 @@ async def utility_commands(client, message, command, parameter):
             await commands.utility.shutdown(client, message)
         case "help":
             await commands.utility.help(message, parameter)
+        case "update":
+            await commands.utility.update(client, message)
 
 async def config_commands(client, message, command, parameter):
     # TODO: Add a permission system for specific commands,

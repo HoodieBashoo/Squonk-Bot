@@ -35,6 +35,10 @@ def utility_embed():
                     "\n"
                     "__shutdown__\n"
                     "- Owner only\n"
+                    "0 Arguments\n"
+                    "\n"
+                    "__update__\n"
+                    "- Owner Only\n"
                     "0 Arguments",
         colour=discord.Colour.orange()
     )
