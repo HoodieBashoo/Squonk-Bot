@@ -30,7 +30,7 @@ async def help(message, parameter):
 async def update(client, message):
     if message.author.id == botinfo.owner_id:
         await message.channel.send("Restarting...")
-        subprocess.call(botinfo.updater_location)
+        subprocess.run(botinfo.updater_location)
         await client.close()
     else:
         await message.channel.send("You do not have permission to do this")
