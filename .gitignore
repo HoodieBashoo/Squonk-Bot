@@ -1,9 +1,11 @@
 .idea
-botinfo.py
 Lib/
+botinfo.py
 Include/
 guild-data/
+*/__pycache__/
 **/__pycache__/
+__pycache__/
 bin/
 *.ps1
 *.cfg
@@ -13,3 +15,4 @@ bin/
 *.fish
 activate
 activate_this.py
+/Lib/
