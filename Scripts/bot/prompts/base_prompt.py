@@ -54,6 +54,7 @@ class BasePrompt():
             await self.previous_message.delete()
             self.previous_message = await self.channel.send(content)
             await self.add_cancel_emoji(response_type)
+            self.interrupted = False
         else:
             self.previous_message = await self.channel.send(content)
             await self.add_cancel_emoji(response_type)

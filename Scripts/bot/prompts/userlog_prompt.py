@@ -74,7 +74,6 @@ class UserlogPrompt(BasePrompt):
                     await self.close_prompt()
 
         if successful:
-            self.interrupted = False
             print("Resetting timer")
 
         if message is not None:
