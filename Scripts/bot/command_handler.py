@@ -1,6 +1,12 @@
 import test
+import time
+
 import botinfo
 import commands
+
+
+def on_start(time):
+    commands.utility.on_start(time)
 
 async def process_command(client, message, prefix):
     content = message.content
@@ -30,6 +36,8 @@ async def utility_commands(client, message, command, parameter):
             await commands.utility.update(client, message)
         case "ping":
             await commands.utility.ping(client, message)
+        case "info":
+            await commands.utility.info(message)
 
 async def config_commands(client, message, command, parameter):
     # TODO: Add a permission system for specific commands,
