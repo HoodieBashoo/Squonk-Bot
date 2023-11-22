@@ -3,6 +3,8 @@ import os
 import sys
 sys.path.append("..")
 
+import discord
+
 import botinfo
 import prompt_handler
 from prompts import helpinfo
@@ -27,6 +29,26 @@ async def help(message, parameter):
                 await message.channel.send(embed=helpinfo.config_embed())
             case "utility":
                 await message.channel.send(embed=helpinfo.utility_embed())
+
+async def ping(client, message):
+    colour = None
+    print(round(client.latency * 1000))
+    if round(client.latency * 1000) <= 150:
+        colour = discord.Colour.green()
+    elif round(client.latency * 1000) <= 200:
+        colour = discord.Colour.yellow()
+    elif round(client.latency * 1000) <= 250:
+        colour = discord.Colour.orange()
+    elif round(client.latency * 1000) <= 300:
+        colour = discord.Colour.red()
+    else:
+        colour = discord.Colour.dark_purple()
+
+    embed = discord.Embed(
+        description=f"poing :O `{round(client.latency * 1000)}ms`",
+        colour=colour
+    )
+    await message.channel.send(embed=embed)
 
 async def update(client, message):
     if message.author.id == botinfo.owner_id:
