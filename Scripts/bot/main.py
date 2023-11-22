@@ -50,8 +50,7 @@ async def on_message(message):
 
     prompt = prompt_handler.find_prompt(message.channel.id)
     if prompt is not None:
-        if prompt.author == message.author:
-            await prompt_handler.process_satisfaction(message)
+        await prompt_handler.process_satisfaction(prompt, message)
 
     server_prefix = guildprefs.get_guild_pref((message.guild.id), "prefix")
     if message.content.startswith(server_prefix):

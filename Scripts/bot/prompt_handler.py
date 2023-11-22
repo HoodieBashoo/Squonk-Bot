@@ -46,10 +46,11 @@ def find_prompts(guild_id):
             guild_prompts.append(prompt)
     return guild_prompts
 
-async def process_satisfaction(message):
-    channel_id = message.channel.id
-    prompt = find_prompt(channel_id)
-    await prompt.next_state(message.content.lower())
+async def process_satisfaction(prompt, message):
+    if prompt.author == message.author:
+        await prompt.next_state(message, message.content.lower())
+    else:
+        prompt.interrupt()
 
 async def end_prompt(channel):
     channel_id = channel.id
@@ -76,6 +77,6 @@ async def create_prompt(author, guild, channel, prompt_type, start_condition, ex
 
     if prompt is not None:
         active_prompts.append(prompt)
-        await prompt.next_state("")
+        await prompt.next_state(None, "")
     else:
         await channel.send("Error creating prompt")
