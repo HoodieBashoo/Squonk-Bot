@@ -7,6 +7,7 @@ from timer import Timer
 
 active_prompts = []
 prompt_time = 5
+cancel_emoji = "❌"
 
 def reset():
     active_prompts = []
@@ -52,6 +53,10 @@ async def process_satisfaction(prompt, message):
     else:
         prompt.interrupt()
 
+async def reaction_cancel(prompt, user):
+    if prompt.author == user:
+        await prompt.cancel_prompt()
+
 async def end_prompt(channel):
     channel_id = channel.id
     prompt = find_prompt(channel_id)
@@ -71,9 +76,9 @@ async def create_prompt(author, guild, channel, prompt_type, start_condition, ex
 
     match prompt_type:
         case "userlog":
-            prompt = UserlogPrompt(author, guild, channel, timer, start_condition, exit_func)
+            prompt = UserlogPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
         case "help":
-            prompt = HelpPrompt(author, guild, channel, timer, exit_func)
+            prompt = HelpPrompt(author, guild, channel, timer, exit_func, cancel_emoji)
 
     if prompt is not None:
         active_prompts.append(prompt)

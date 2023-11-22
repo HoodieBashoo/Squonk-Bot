@@ -41,6 +41,12 @@ async def on_member_unban(guild, member):
     await userlog.member_unbanned(client, guild, member)
 
 @client.event
+async def on_reaction_add(reaction, user):
+    prompt = prompt_handler.find_prompt(reaction.message.channel.id)
+    if prompt is not None:
+        await prompt_handler.reaction_cancel(prompt, user)
+
+@client.event
 async def on_message(message):
     if message.author.id == client.user.id:
         return
