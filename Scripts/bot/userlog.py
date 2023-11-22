@@ -25,20 +25,17 @@ async def member_unbanned(client, guild, member):
 
 async def send_message(client, channel, content):
     try:
-        print("sending userlog message")
         await channel.send(content)
     except:
-        print("dming owner because sending userlog message failed")
         owner = await client.fetch_user(channel.guild.owner_id)
-        await owner.send("Failed to send userlog message in the specified channel.\nLikely culprit: No Permission")
+        await owner.send(f"`{channel.guild.name}`: Failed to send userlog message in the specified channel.\nLikely culprit: No Permission")
 
 async def no_channel_error(client, guild):
     owner = await client.fetch_user(guild.owner_id)
     prefix = guildprefs.get_guild_pref(guild.id, "prefix")
-    await owner.send(f"Failed to send userlog message in the specified channel.\nLikely culprit: Channel Deleted\nAction needed: activate {prefix}userlog and enter a new channel ID")
+    await owner.send(f"`{guild.name}`: Failed to send userlog message in the specified channel.\nLikely culprit: Channel Deleted\nAction needed: activate {prefix}userlog and enter a new channel ID")
     guildprefs.edit_guild_pref(guild.id, "userlog", False)
     guildprefs.edit_guild_pref(guild.id, "userlog_channel", 0)
-    print("Erased guild prefs for userlog because channel didn't exist")
 
 async def get_channel_if_valid_from_guild(client, guild):
     if guildprefs.get_guild_pref(guild.id, "userlog"):
