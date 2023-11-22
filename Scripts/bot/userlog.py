@@ -1,39 +1,60 @@
 import guildprefs
 
-async def member_joined(member):
-    channel = get_channel_if_valid_from_member(member)
+async def member_joined(client, member):
+    channel = await get_channel_if_valid_from_member(client, member)
     if channel is not None:
         # TODO: Add random welcome message after the period
-        await channel.send(f"{member.mention} has entered the chat.")
+        await send_message(client, channel, f"{member.mention} has entered the chat.")
 
-async def member_left(member):
+async def member_left(client, member):
     # TODO: Check if the user was kicked instead of left
-    channel = get_channel_if_valid_from_member(member)
+    channel = await get_channel_if_valid_from_member(client, member)
     if channel is not None:
         # TODO: Add random hate message after the period
-        await channel.send(f"{get_member_identification(member)} has left the chat.")
+        await send_message(client, channel, f"{get_member_identification(member)} has left the chat.")
 
-async def member_banned(guild, member):
-    channel = get_channel_if_valid_from_guild(guild)
+async def member_banned(client, guild, member):
+    channel = await get_channel_if_valid_from_guild(client, guild)
     if channel is not None:
-        await channel.send(f"{get_member_identification(member)} has been banned.")
+        await send_message(client, channel, f"{get_member_identification(member)} has been banned.")
 
-async def member_unbanned(guild, member):
-    channel = get_channel_if_valid_from_guild(guild)
+async def member_unbanned(client, guild, member):
+    channel = await get_channel_if_valid_from_guild(client, guild)
     if channel is not None:
-        await channel.send(f"{get_member_identification(member)} has been unbanned.")
+        await send_message(client, channel, f"{get_member_identification(member)} has been unbanned.")
 
-def get_channel_if_valid_from_guild(guild):
+async def send_message(client, channel, content):
+    try:
+        print("sending userlog message")
+        await channel.send(content)
+    except:
+        print("dming owner because sending userlog message failed")
+        owner = await client.fetch_user(channel.guild.owner_id)
+        await owner.send("Failed to send userlog message in the specified channel.\nLikely culprit: No Permission")
+
+async def no_channel_error(client, guild):
+    owner = await client.fetch_user(guild.owner_id)
+    prefix = guildprefs.get_guild_pref(guild.id, "prefix")
+    await owner.send(f"Failed to send userlog message in the specified channel.\nLikely culprit: Channel Deleted\nAction needed: activate {prefix}userlog and enter a new channel ID")
+    guildprefs.edit_guild_pref(guild.id, "userlog", False)
+    guildprefs.edit_guild_pref(guild.id, "userlog_channel", 0)
+    print("Erased guild prefs for userlog because channel didn't exist")
+
+async def get_channel_if_valid_from_guild(client, guild):
     if guildprefs.get_guild_pref(guild.id, "userlog"):
         channel_id = guildprefs.get_guild_pref(guild.id, "userlog_channel")
         channel = guild.get_channel(int(channel_id))
+        if channel is None:
+            await no_channel_error(client, guild)
         return channel
 
-def get_channel_if_valid_from_member(member):
+async def get_channel_if_valid_from_member(client, member):
     guild = member.guild
     if guildprefs.get_guild_pref(guild.id, "userlog"):
         channel_id = guildprefs.get_guild_pref(guild.id, "userlog_channel")
         channel = guild.get_channel(int(channel_id))
+        if channel is None:
+            await no_channel_error(client, guild)
         return channel
 
 def get_member_identification(member):

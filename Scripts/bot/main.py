@@ -26,19 +26,19 @@ async def on_guild_join(guild):
 
 @client.event
 async def on_member_join(member):
-    await userlog.member_joined(member)
+    await userlog.member_joined(client, member)
 
 @client.event
 async def on_member_remove(member):
-    await userlog.member_left(member)
+    await userlog.member_left(client, member)
 
 @client.event
 async def on_member_ban(guild, member):
-    await userlog.member_banned(guild, member)
+    await userlog.member_banned(client, guild, member)
 
 @client.event
 async def on_member_unban(guild, member):
-    await userlog.member_unbanned(guild, member)
+    await userlog.member_unbanned(client, guild, member)
 
 @client.event
 async def on_message(message):
