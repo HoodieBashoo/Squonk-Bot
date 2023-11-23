@@ -11,6 +11,7 @@ async def process_reaction(client, info):
         return
 
     emoji = get_pin_emoji_object(client, message)
+    print(emoji)
     pin_reaction = discord.utils.get(message.reactions, emoji=emoji)
     if pin_reaction is not None:
         await pin_message(client, message.author, message.channel, message)
@@ -67,10 +68,12 @@ def get_pin_emoji_object(client, message):
     emoji = guildprefs.get_guild_pref(message.guild.id, "pin_activation_emoji")
     try:
         pin_emoji_object = client.get_emoji(int(emoji))
+        print(f"Got custom emoji {pin_emoji_object}")
     except:
+        print("Failed to get custom emoji")
         pin_emoji_object = emoji
 
-    return emoji
+    return pin_emoji_object
 
 async def no_channel_error(client, guild):
     owner = await client.fetch_user(guild.owner_id)
