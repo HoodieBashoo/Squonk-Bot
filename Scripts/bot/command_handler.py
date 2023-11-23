@@ -31,14 +31,14 @@ async def utility_commands(client, message, command, parameter):
         case "shutdown":
             await commands.utility.shutdown(client, message)
         case "help":
-            await commands.utility.help(message, parameter)
+            await commands.utility.help(client, message, parameter)
         case "update":
             await commands.utility.update(client, message)
         case "ping":
             await commands.utility.ping(client, message)
         case "info":
             await commands.utility.info(message)
-        case "prefsupdate":
+        case "updateprefs":
             await commands.utility.prefs_update(client, message)
 
 async def config_commands(client, message, command, parameter):
@@ -46,10 +46,10 @@ async def config_commands(client, message, command, parameter):
     #  config commands are manually disabled for other users rn
     match command:
         case "prefix":
-            await commands.config.update_prefix(message, parameter, message.channel)
+            await commands.config.update_prefix(client, message, parameter, message.channel)
         case "updateprefix":
-            await commands.config.update_prefix(message, parameter, message.channel)
+            await commands.config.update_prefix(client, message, parameter, message.channel)
         case "userlog":
-            await commands.config.userlog(message)
+            await commands.config.userlog(client, message)
         case "pinboard":
-            await commands.config.pinboard(message)
+            await commands.config.pinboard(client, message)

@@ -14,7 +14,7 @@ def reset():
 
 # TODO: Add a timer so that prompts end after 30 seconds of inactivity
 
-async def start_prompt(author, guild, channel, prompt_type, start_condition):
+async def start_prompt(client, author, guild, channel, prompt_type, start_condition):
     if find_prompt(channel.id) is not None:
         await channel.send("Another prompt is already running in this channel")
         return
@@ -27,7 +27,7 @@ async def start_prompt(author, guild, channel, prompt_type, start_condition):
                     await channel.send(f"A {prompt_type} prompt is already running in this server")
                     return
 
-    new_prompt = await create_prompt(author, guild, channel, prompt_type, start_condition, end_prompt)
+    new_prompt = await create_prompt(client, author, guild, channel, prompt_type, start_condition, end_prompt)
 
 def find_prompt(channel_id):
     if len(active_prompts) <= 0:
@@ -70,7 +70,7 @@ def get_prompt_data(prompt_type, prompt, answer):
             message, responses = userlog_prompt.get_prompt_data(prompt.prompt_state)
             return message, responses
 
-async def create_prompt(author, guild, channel, prompt_type, start_condition, exit_func):
+async def create_prompt(client, author, guild, channel, prompt_type, start_condition, exit_func):
     timer = Timer(prompt_time, channel, exit_func)
     prompt = None
 
@@ -80,7 +80,7 @@ async def create_prompt(author, guild, channel, prompt_type, start_condition, ex
         case "help":
             prompt = HelpPrompt(author, guild, channel, timer, exit_func, cancel_emoji)
         case "pinboard":
-            prompt = PinboardPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
+            prompt = PinboardPrompt(client, author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
 
     if prompt is not None:
         active_prompts.append(prompt)

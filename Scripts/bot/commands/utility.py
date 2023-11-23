@@ -18,9 +18,9 @@ async def shutdown(client, message):
     else:
         await message.channel.send("You do not have permission to do this")
 
-async def help(message, parameter):
+async def help(client, message, parameter):
     if (parameter == ""):
-        await prompt_handler.start_prompt(message.author, message.guild, message.channel, "help", "")
+        await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "help", "")
     else:
         match parameter:
             case "all":
