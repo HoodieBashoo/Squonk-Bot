@@ -9,7 +9,8 @@ import userlog
 
 
 intents = discord.Intents.all()
-client = discord.Client(intents=intents)
+activity = discord.Activity(type=discord.ActivityType.watching, name="squonkers fight")
+client = discord.Client(intents=intents, activity=activity)
 
 @client.event
 async def on_ready():
