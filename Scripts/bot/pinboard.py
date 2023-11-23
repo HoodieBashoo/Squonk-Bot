@@ -11,7 +11,7 @@ async def process_reaction(client, info):
         return
 
     emoji = get_pin_emoji_object(client, message)
-    pin_reaction = discord.utils.get(message.reactions, emoji=pin_emoji_object)
+    pin_reaction = discord.utils.get(message.reactions, emoji=emoji)
     if pin_reaction is not None:
         await pin_message(client, message.author, message.channel, message)
 
