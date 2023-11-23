@@ -19,6 +19,11 @@ def config_embed():
                     "\n"
                     "__userlog__\n"
                     "- Configure a channel for updates on members joining and leaving\n"
+                    "0 Arguments\n"
+                    "\n"
+                    "__pinboard__\n"
+                    "- Configure a channel to send pinned messages to!\n"
+                    "- React with the specified emoji or use the built-in pin button to utilize this feature\n"
                     "0 Arguments",
         colour=discord.Colour.orange()
     )
