@@ -1,5 +1,3 @@
-import urllib.error
-
 import discord
 
 import guildprefs
@@ -15,16 +13,29 @@ async def process_reaction(client, info):
     if guildprefs.get_guild_pref(message.guild.id, "pinboard") is False:
         return
 
+    # TODO: pin_emoji = guildprefs.get_guild_pref(message.guild.id, "pin_emoji")
+    # set pin emoji in the prompt
     reaction = discord.utils.get(message.reactions, emoji=pin_emoji)
-    # TODO: reaction = discord.utils.get(message.reactions, emoji=guildprefs.get_guild_pref(message.guild.id, "pin_emoji"))
-     # set pin emoji in the prompt
+
+    reactions = message.reactions
+    for reaction in reactions:
+        if reaction.emoji == pin_emoji:
+            if reaction.count > 1:
+                return
+            else:
+                break
 
     if reaction is not None:
-        await pin_message(client, info.member, message.channel, message)
+        await pin_message(client, message.author, message.channel, message)
 
 async def pin_message(client, member, message_channel, message):
     channel = await get_channel_if_valid_from_member(client, member)
-    webhook = await channel.create_webhook(name=member.global_name)
+    name = ""
+    if (member.global_name is not None):
+        name = member.global_name
+    else:
+        name = member.name
+    webhook = await channel.create_webhook(name=name)
 
     link = f"{message.jump_url}\n\n"
     content = f"{link}{message.content}"
@@ -40,7 +51,8 @@ async def pin_message(client, member, message_channel, message):
 
 async def send_message(client, member, channel, webhook, content, attachments):
     try:
-        await webhook.send(content=content, avatar_url=str(member.display_avatar.url), files=attachments)
+        message = await webhook.send(content=content, avatar_url=str(member.display_avatar.url), files=attachments, wait=True)
+        await message.add_reaction(pin_emoji)
     except:
         owner = await client.fetch_user(channel.guild.owner_id)
         await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprit: No Permission, File too large, File invalid")
