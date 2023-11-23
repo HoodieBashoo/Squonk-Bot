@@ -41,7 +41,7 @@ async def ping(client, message):
         colour = discord.Colour.yellow()
     elif round(client.latency * 1000) <= 250:
         colour = discord.Colour.orange()
-    elif round(client.latency * 1000) <= 300:
+    elif round(client.latency * 1000) <= 350:
         colour = discord.Colour.red()
     else:
         colour = discord.Colour.dark_purple()
@@ -75,6 +75,11 @@ async def update(client, message):
         await client.close()
     else:
         await message.channel.send("You do not have permission to do this")
+
+async def prefs_update(client, message):
+    if (message.author.id != botinfo.owner_id):
+        return
+    guildprefs.update_guild_pref_data(client)
 
 def on_start(time):
     global start_time

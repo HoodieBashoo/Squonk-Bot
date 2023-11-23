@@ -1,3 +1,4 @@
+import os
 import os.path
 import json
 from pathlib import Path
@@ -6,9 +7,11 @@ from botinfo import guild_data_path
 
 
 default_prefs = {
-    "prefix": "!",
+    "prefix": "s!",
     "userlog": False,
     "userlog_channel": 0,
+    "pinboard": False,
+    "pinboard_channel": 0
 }
 
 def initialize_guild(guild_id):
@@ -47,11 +50,33 @@ def get_guild_pref(guild_id, preference):
         print(f"Critical Error! File does not exist at {full_path}")
         return False
 
+def update_guild_pref_data(client):
+    for guild in client.guilds:
+        print(f"updating guild pref data on guild {guild.name}")
+        full_path = get_full_path(guild.id)
+        try:
+            with open(full_path, "r+") as file:
+                data = json.load(file)
+
+                found_pref = False
+                for default_pref in default_prefs:
+                    found_pref = False
+                    for pref in data:
+                        if pref == default_pref:
+                            found_pref = True
+                            break
+                    if found_pref is False:
+                        data[default_pref] = default_prefs[default_pref]
+
+                file.seek(0)
+                json.dump(data, file, indent=4)
+                file.truncate()
+                print("Successfully updated")
+        except:
+            print(f"Could not find file for {guild.name} while updating guild pref data. Creating...")
+            initialize_guild(guild.id)
+
 def get_full_path(guild_id):
     filename = str(guild_id) + ".json"
     full_path = os.path.join(guild_data_path, filename)
     return full_path
-
-#initialize_guild(1123123123123)
-#edit_guild_pref(1123123123123, "prefix", "$")
-#print(get_guild_pref(1123123123123, "prefix"))

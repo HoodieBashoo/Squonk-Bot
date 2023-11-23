@@ -30,3 +30,9 @@ async def userlog(message):
         await prompt_handler.start_prompt(message.author, message.guild, message.channel, "userlog", "enabled")
     else:
         await prompt_handler.start_prompt(message.author, message.guild, message.channel, "userlog", "disabled")
+
+async def pinboard(message):
+    if (message.author.id != botinfo.owner_id):
+        await message.channel.send(f"Only the bot owner can use this command until a proper permission system is set up")
+        return
+

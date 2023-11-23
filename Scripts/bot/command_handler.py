@@ -38,6 +38,8 @@ async def utility_commands(client, message, command, parameter):
             await commands.utility.ping(client, message)
         case "info":
             await commands.utility.info(message)
+        case "prefsupdate":
+            await commands.utility.prefs_update(client, message)
 
 async def config_commands(client, message, command, parameter):
     # TODO: Add a permission system for specific commands,
