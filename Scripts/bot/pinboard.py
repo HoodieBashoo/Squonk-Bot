@@ -6,26 +6,23 @@ import guildprefs
 pin_emoji = "📌"
 
 async def process_reaction(client, info):
-    if info.member.id == client.user.id:
-        return
-
     message = await client.get_channel(info.channel_id).fetch_message(info.message_id)
-    if guildprefs.get_guild_pref(message.guild.id, "pinboard") is False:
+    if not is_valid(client, info, message):
         return
 
     # TODO: pin_emoji = guildprefs.get_guild_pref(message.guild.id, "pin_emoji")
     # set pin emoji in the prompt
-    reaction = discord.utils.get(message.reactions, emoji=pin_emoji)
+    pin_reaction = discord.utils.get(message.reactions, emoji=pin_emoji)
 
     reactions = message.reactions
     for reaction in reactions:
         if reaction.emoji == pin_emoji:
-            if reaction.count > 1:
+            if reaction.count > 1 or message.channel == message.guild.get_channel(int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
                 return
             else:
                 break
 
-    if reaction is not None:
+    if pin_reaction is not None:
         await pin_message(client, message.author, message.channel, message)
 
 async def pin_message(client, member, message_channel, message):
@@ -56,6 +53,13 @@ async def send_message(client, member, channel, webhook, content, attachments):
     except:
         owner = await client.fetch_user(channel.guild.owner_id)
         await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprit: No Permission, File too large, File invalid")
+
+def is_valid(client, info, message):
+    if info.member.id == client.user.id:
+        return False
+    if guildprefs.get_guild_pref(message.guild.id, "pinboard") is False:
+        return False
+    return True
 
 async def no_channel_error(client, guild):
     owner = await client.fetch_user(guild.owner_id)
