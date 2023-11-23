@@ -36,3 +36,8 @@ async def pinboard(message):
         await message.channel.send(f"Only the bot owner can use this command until a proper permission system is set up")
         return
 
+    guild = message.guild
+    if guildprefs.get_guild_pref(guild.id, "pinboard") == True:
+        await prompt_handler.start_prompt(message.author, message.guild, message.channel, "pinboard", "enabled")
+    else:
+        await prompt_handler.start_prompt(message.author, message.guild, message.channel, "pinboard", "disabled")

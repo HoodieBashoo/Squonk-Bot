@@ -51,3 +51,5 @@ async def config_commands(client, message, command, parameter):
             await commands.config.update_prefix(message, parameter, message.channel)
         case "userlog":
             await commands.config.userlog(message)
+        case "pinboard":
+            await commands.config.pinboard(message)

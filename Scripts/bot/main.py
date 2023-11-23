@@ -6,7 +6,7 @@ import command_handler
 import prompt_handler
 import guildprefs
 import userlog
-
+import pinboard
 
 intents = discord.Intents.all()
 activity = discord.Activity(type=discord.ActivityType.watching, name="squonkers fight")
@@ -48,6 +48,10 @@ async def on_reaction_add(reaction, user):
     prompt = prompt_handler.find_prompt(reaction.message.channel.id)
     if prompt is not None:
         await prompt_handler.reaction_cancel(prompt, user)
+
+@client.event
+async def on_raw_reaction_add(info):
+    await pinboard.process_reaction(client, info)
 
 @client.event
 async def on_message(message):

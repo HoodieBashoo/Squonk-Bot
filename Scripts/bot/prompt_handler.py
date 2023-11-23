@@ -79,6 +79,8 @@ async def create_prompt(author, guild, channel, prompt_type, start_condition, ex
             prompt = UserlogPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
         case "help":
             prompt = HelpPrompt(author, guild, channel, timer, exit_func, cancel_emoji)
+        case "pinboard":
+            prompt = PinboardPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
 
     if prompt is not None:
         active_prompts.append(prompt)
