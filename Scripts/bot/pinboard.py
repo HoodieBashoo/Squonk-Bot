@@ -55,7 +55,7 @@ def is_valid(client, info, message):
     emoji = get_pin_emoji_object(client, message)
 
     for reaction in reactions:
-        if reaction.emoji == pin_emoji or reaction.emoji == emoji:
+        if reaction.emoji == emoji:
             if reaction.count > 1 or message.channel == message.guild.get_channel(int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
                 return False
             else:
