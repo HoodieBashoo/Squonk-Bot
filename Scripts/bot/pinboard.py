@@ -1,4 +1,5 @@
 import discord
+import emoji
 
 import guildprefs
 
@@ -10,9 +11,8 @@ async def process_reaction(client, info):
     if not is_valid(client, info, message):
         return
 
-    emoji = get_pin_emoji_object(client, message)
-    print(emoji)
-    pin_reaction = discord.utils.get(message.reactions, emoji=emoji)
+    pin_emoji_object = get_pin_emoji_object(client, message)
+    pin_reaction = discord.utils.get(message.reactions, emoji=pin_emoji_object)
     if pin_reaction is not None:
         await pin_message(client, message.author, message.channel, message)
 
@@ -50,13 +50,20 @@ def is_valid(client, info, message):
         return False
     if guildprefs.get_guild_pref(message.guild.id, "pinboard") is False:
         return False
+    if message.channel == message.guild.get_channel(int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
+        return False
+    pin_emoji_object = get_pin_emoji_object(client, message)
+    try:
+        if emoji.demojize(info.emoji.name) != emoji.demojize(pin_emoji_object):
+            return False
+    except:
+        if info.emoji != pin_emoji_object:
+            return False
 
     reactions = message.reactions
-    emoji = get_pin_emoji_object(client, message)
-
     for reaction in reactions:
-        if reaction.emoji == emoji:
-            if reaction.count > 1 or message.channel == message.guild.get_channel(int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
+        if reaction.emoji == pin_emoji_object:
+            if reaction.count > 1:
                 return False
             else:
                 break
@@ -67,9 +74,7 @@ def get_pin_emoji_object(client, message):
     emoji = guildprefs.get_guild_pref(message.guild.id, "pin_activation_emoji")
     try:
         pin_emoji_object = client.get_emoji(int(emoji))
-        print(f"Got custom emoji {pin_emoji_object}")
     except:
-        print("Failed to get custom emoji")
         pin_emoji_object = emoji
 
     return pin_emoji_object
