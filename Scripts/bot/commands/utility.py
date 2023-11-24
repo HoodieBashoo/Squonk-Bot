@@ -19,14 +19,13 @@ async def shutdown(client, message):
         await message.channel.send("You do not have permission to do this")
 
 async def help(client, message, parameter):
-    if (parameter == ""):
+    if parameter == "":
         await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "help", "")
     else:
         match parameter:
             case "all":
                 embeds = helpinfo.all_embeds()
-                for embed in embeds:
-                    await message.channel.send(embed=embed)
+                await message.channel.send(embeds=embeds)
             case "config":
                 await message.channel.send(embed=helpinfo.config_embed())
             case "utility":

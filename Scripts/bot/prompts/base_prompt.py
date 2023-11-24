@@ -36,8 +36,7 @@ class BasePrompt():
     async def send_embeds(self, embeds):
         if self.previous_message is not None:
             await self.previous_message.delete()
-        for embed in embeds:
-            await self.channel.send(embed=embed)
+        await self.channel.send(embeds=embeds)
 
     async def send_embed(self, embed):
         if self.previous_message is not None:
