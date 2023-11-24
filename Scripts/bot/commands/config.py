@@ -5,6 +5,7 @@ import guildprefs
 import botinfo
 import prompt_handler
 
+
 async def update_prefix(message, new_prefix, send_channel):
     if (message.author.id != botinfo.owner_id):
         await message.channel.send(f"Only the bot owner can use this command until a proper permission system is set up")
@@ -41,3 +42,7 @@ async def pinboard(client, message):
         await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "pinboard", "enabled")
     else:
         await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "pinboard", "disabled")
+
+async def twitter_helper(message):
+    # start twithelper config prompt
+    pass

@@ -53,3 +53,5 @@ async def config_commands(client, message, command, parameter):
             await commands.config.userlog(client, message)
         case "pinboard":
             await commands.config.pinboard(client, message)
+        case "twithelper":
+            await commands.config.twitter_helper(message)
