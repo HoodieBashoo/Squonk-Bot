@@ -1,0 +1,5 @@
+bot_token: str
+guild_data_path: str
+owner_id: int
+description: str
+updater_location: str

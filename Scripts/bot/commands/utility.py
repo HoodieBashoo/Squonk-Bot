@@ -70,6 +70,9 @@ async def info(message):
 
 async def update(client, message):
     if message.author.id == botinfo.owner_id:
+        if botinfo.updater_location is None:
+            await message.channel.send("No updater found")
+            return
         await message.channel.send("Restarting...")
         subprocess.Popen([botinfo.updater_location])
         await client.close()

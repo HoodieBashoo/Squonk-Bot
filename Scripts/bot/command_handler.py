@@ -46,9 +46,9 @@ async def config_commands(client, message, command, parameter):
     #  config commands are manually disabled for other users rn
     match command:
         case "prefix":
-            await commands.config.update_prefix(client, message, parameter, message.channel)
+            await commands.config.update_prefix(message, parameter, message.channel)
         case "updateprefix":
-            await commands.config.update_prefix(client, message, parameter, message.channel)
+            await commands.config.update_prefix(message, parameter, message.channel)
         case "userlog":
             await commands.config.userlog(client, message)
         case "pinboard":
