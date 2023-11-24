@@ -56,8 +56,7 @@ def is_valid(client, info, message):
 
     for reaction in reactions:
         if reaction.emoji == pin_emoji or reaction.emoji == emoji:
-            if reaction.count > 1 or message.channel == message.guild.get_channel(
-                    int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
+            if reaction.count > 1 or message.channel == message.guild.get_channel(int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel"))):
                 return False
             else:
                 break
@@ -78,9 +77,10 @@ def get_pin_emoji_object(client, message):
 async def no_channel_error(client, guild):
     owner = await client.fetch_user(guild.owner_id)
     prefix = guildprefs.get_guild_pref(guild.id, "prefix")
-    await owner.send(f"`{guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprit: Channel Deleted\nAction needed: activate {prefix}userlog and enter a new channel ID")
-    guildprefs.edit_guild_pref(guild.id, "userlog", False)
-    guildprefs.edit_guild_pref(guild.id, "userlog_channel", 0)
+    await owner.send(f"`{guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprit: Channel Deleted\nAction needed: activate {prefix}pinboard and enter a new channel ID")
+    guildprefs.edit_guild_pref(guild.id, "pinboard", False)
+    guildprefs.edit_guild_pref(guild.id, "pinboard_channel", 0)
+    guildprefs.edit_guild_pref(guild.id, "pin_activation_emoji", "")
 
 async def get_channel_if_valid_from_member(client, member):
     guild = member.guild
