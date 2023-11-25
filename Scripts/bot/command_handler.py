@@ -17,7 +17,7 @@ async def process_command(client, message, prefix):
         parameter = ""
     else:
         command = content[len(prefix):next_space_index]
-        parameter = content[next_space_index+1:].lower()
+        parameter = content[next_space_index+1:]
 
     await run_command(client, message, command, parameter)
     pass
@@ -31,7 +31,7 @@ async def utility_commands(client, message, command, parameter):
         case "shutdown":
             await commands.utility.shutdown(client, message)
         case "help":
-            await commands.utility.help(client, message, parameter)
+            await commands.utility.help(client, message, parameter.lower())
         case "update":
             await commands.utility.update(client, message)
         case "ping":
