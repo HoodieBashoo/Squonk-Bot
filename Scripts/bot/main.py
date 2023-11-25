@@ -8,7 +8,7 @@ import guildprefs
 import userlog
 import pinboard
 import twitter_helper
-from twitter_helper import has_twitter_link
+from twitter_helper import get_twitter_links
 
 intents = discord.Intents.all()
 activity = discord.Activity(type=discord.ActivityType.watching, name="squonkers fight")
@@ -71,7 +71,8 @@ async def on_message(message):
     if message.content.startswith(server_prefix):
         await command_handler.process_command(client, message, server_prefix)
 
-    if has_twitter_link(message.content):
-        await twitter_helper.send_helper(message)
+    twitter_links = get_twitter_links(message.content)
+    if twitter_links:
+        await twitter_helper.send_helper(message, twitter_links)
 
 client.run(botinfo.bot_token)

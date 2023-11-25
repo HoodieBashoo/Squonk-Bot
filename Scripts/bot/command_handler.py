@@ -1,5 +1,4 @@
 import test
-import time
 
 import botinfo
 import commands
