@@ -17,7 +17,7 @@ async def process_command(client, message, prefix):
         parameter = ""
     else:
         command = content[len(prefix):next_space_index]
-        parameter = content[next_space_index+1:]
+        parameter = content[next_space_index+1:].lower()
 
     await run_command(client, message, command, parameter)
     pass
