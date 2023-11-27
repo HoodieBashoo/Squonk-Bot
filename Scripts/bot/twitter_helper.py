@@ -49,15 +49,18 @@ def get_twitter_links(content):
 
 async def edit_helper_message(message, replacement):
     content = message.content
-    search_terms = ["twitter, x, fxtwitter, vxtwitter, fixupx"]
-    search_index = 0
+    search_terms = ["fxtwitter", "vxtwitter", "fixupx", "x", "twitter"]
     for term in search_terms:
-        instance = content.find(term, search_index)
-        if instance >= 0:
-            search_index = instance + 1
-            # replace term with replacement
-        else:
-            break
+        index = content.find(term)
+        if index >= 0:
+            print(f"{content[index]} {content[index + 1]}")
+            print(f"{content[index]} {content[index - 1]}")
+            if term == "x":
+                if content[index + 1] != "t" or content[index - 1] != "p":
+                    print(f"replacing {term} with {replacement}")
+                    content = content.replace(term, replacement)
+            else:
+                content = content.replace(term, replacement)
     await message.edit(content=content)
 
 class twitter_buttons(View):
@@ -67,13 +70,13 @@ class twitter_buttons(View):
 
     @discord.ui.button(label="vx", style=discord.ButtonStyle.secondary)
     async def vx_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "vx")
+        await edit_helper_message(interaction.message, "vxtwitter")
         await self.message.channel.send("vx")
         await interaction.response.defer()
 
     @discord.ui.button(label="fx", style=discord.ButtonStyle.secondary)
     async def fx_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "fx")
+        await edit_helper_message(interaction.message, "fxtwitter")
         await self.message.channel.send("fx")
         await interaction.response.defer()
 
@@ -85,6 +88,6 @@ class twitter_buttons(View):
 
     @discord.ui.button(label="direct", style=discord.ButtonStyle.secondary)
     async def direct_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "direct")
+        await edit_helper_message(interaction.message, "twitter")
         await self.message.channel.send("direct")
         await interaction.response.defer()
