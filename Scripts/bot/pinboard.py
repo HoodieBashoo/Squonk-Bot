@@ -34,12 +34,12 @@ async def pin_message(client, member, message_channel, message):
         file = await attachment.to_file()
         files.append(file)
 
-    await send_message(client, member, channel, webhook, content, files)
+    await send_message(client, member, channel, webhook, content, files, message.embeds)
     await webhook.delete()
 
-async def send_message(client, member, channel, webhook, content, attachments):
+async def send_message(client, member, channel, webhook, content, attachments, embeds):
     try:
-        message = await webhook.send(content=content, avatar_url=str(member.display_avatar.url), files=attachments, wait=True)
+        message = await webhook.send(content=content, avatar_url=str(member.display_avatar.url), files=attachments, embeds=embeds, wait=True)
         await message.add_reaction(pin_emoji)
     except:
         owner = await client.fetch_user(channel.guild.owner_id)
