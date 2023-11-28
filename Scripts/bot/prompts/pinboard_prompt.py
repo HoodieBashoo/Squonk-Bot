@@ -28,7 +28,7 @@ class PinboardPrompt(BasePrompt):
         successful = False
         currentState = self.state
         match currentState:
-            # PURPOSE: USERLOG NOT YET ENABLED
+            # PURPOSE: Pinboard NOT YET ENABLED
             case 0:
                 self.requested_responses = ["y", "n"]
                 self.state = 1
@@ -86,7 +86,7 @@ class PinboardPrompt(BasePrompt):
                 if response == self.requested_responses[0]:
                     self.requested_responses = []
                     self.state = 2
-                    await self.next_message("Righty then :3, send a new channel ID", self.ResponseType.Normal)
+                    await self.next_message("Righty then, send a new channel ID", self.ResponseType.Normal)
                     successful = True
                 elif response == self.requested_responses[1]:
                     self.final_prefs["pinboard"] = False

@@ -43,7 +43,7 @@ async def send_message(client, member, channel, webhook, content, attachments, e
         await message.add_reaction(pin_emoji)
     except:
         owner = await client.fetch_user(channel.guild.owner_id)
-        await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprit: No Permission, File too large, File invalid")
+        await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
 
 def is_valid(client, info, message):
     if info.member.id == client.user.id:
