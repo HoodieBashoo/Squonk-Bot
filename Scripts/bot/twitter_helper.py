@@ -119,27 +119,32 @@ class twitter_buttons(View):
 
     @discord.ui.button(label="vxtwitter", style=discord.ButtonStyle.secondary)
     async def vx_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "vxtwitter")
+        if interaction.user == self.message.author:
+            await edit_helper_message(interaction.message, "vxtwitter")
         await interaction.response.defer()
 
     @discord.ui.button(label="fxtwitter", style=discord.ButtonStyle.secondary)
     async def fx_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "fxtwitter")
+        if interaction.user == self.message.author:
+            await edit_helper_message(interaction.message, "fxtwitter")
         await interaction.response.defer()
 
     '''
     @discord.ui.button(label="fixupx", style=discord.ButtonStyle.secondary)
     async def fixupx_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "fixupx")
+        if interaction.user == self.message.author:
+            await edit_helper_message(interaction.message, "fixupx")
         await interaction.response.defer()
         '''
 
     @discord.ui.button(label="direct", style=discord.ButtonStyle.secondary)
     async def direct_callback(self, interaction, button):
-        await edit_helper_message(interaction.message, "twitter")
+        if interaction.user == self.message.author:
+            await edit_helper_message(interaction.message, "twitter")
         await interaction.response.defer()
 
     @discord.ui.button(style=discord.ButtonStyle.red, emoji="✖️")
     async def delete_callback(self, interaction, button):
-        await self.helper_message.delete()
+        if interaction.user == self.message.author:
+            await self.helper_message.delete()
         await interaction.response.defer()
