@@ -129,12 +129,16 @@ class twitter_buttons(View):
     async def vx_callback(self, interaction, button):
         if interaction.user == self.message.author:
             await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "vxtwitter"))
+        else:
+            await self.send_user_error(interaction)
         await interaction.response.defer()
 
     @discord.ui.button(label="fxtwitter", style=discord.ButtonStyle.secondary)
     async def fx_callback(self, interaction, button):
         if interaction.user == self.message.author:
             await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "fxtwitter"))
+        else:
+            await self.send_user_error(interaction)
         await interaction.response.defer()
 
     '''
@@ -142,6 +146,8 @@ class twitter_buttons(View):
     async def fixupx_callback(self, interaction, button):
         if interaction.user == self.message.author:
             await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "fixupx"))
+        else:
+        await self.send_user_error(interaction)
         await interaction.response.defer()
         '''
 
@@ -149,10 +155,17 @@ class twitter_buttons(View):
     async def direct_callback(self, interaction, button):
         if interaction.user == self.message.author:
             await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "twitter"))
+        else:
+            await self.send_user_error(interaction)
         await interaction.response.defer()
 
     @discord.ui.button(style=discord.ButtonStyle.red, emoji="✖️")
     async def delete_callback(self, interaction, button):
         if interaction.user == self.message.author:
             await self.helper_message.delete()
+        else:
+            await self.send_user_error(interaction)
         await interaction.response.defer()
+
+    async def send_user_error(self, interaction):
+        await interaction.response.send_message("gtfo bozo only the sender of the original tweet can change this", ephemeral=True)
