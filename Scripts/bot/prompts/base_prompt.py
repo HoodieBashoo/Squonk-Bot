@@ -64,7 +64,7 @@ class BasePrompt():
 
     async def cancel_prompt(self):
         self.stop_timer()
-        await self.channel.send("Prompt cancelled")
+        await self.next_message("Prompt cancelled", self.ResponseType.End)
         await self.exit_func(self.channel)
 
     async def close_prompt(self):

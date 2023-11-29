@@ -12,7 +12,8 @@ default_prefs = {
     "userlog_channel": 0,
     "pinboard": False,
     "pinboard_channel": 0,
-    "pin_activation_emoji": ""
+    "pin_activation_emoji": "",
+    "twithelper": False
 }
 
 def initialize_guild(guild_id):

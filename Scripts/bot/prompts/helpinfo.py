@@ -24,6 +24,10 @@ def config_embed():
                     "__pinboard__\n"
                     "- Configure a channel to send pinned messages to!\n"
                     "- React with the specified emoji or use the built-in pin button to utilize this feature\n"
+                    "0 Arguments\n"
+                    "\n"
+                    "__twithelper__\n"
+                    "- Enable or disable an automatic twitter embed fixer\n"
                     "0 Arguments",
         colour=discord.Colour.orange()
     )

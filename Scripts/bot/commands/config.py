@@ -43,6 +43,14 @@ async def pinboard(client, message):
     else:
         await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "pinboard", "disabled")
 
-async def twitter_helper(message):
-    # start twithelper config prompt
-    pass
+async def twitter_helper(client, message):
+    if (message.author.id != botinfo.owner_id):
+        await message.channel.send(
+            f"Only the bot owner can use this command until a proper permission system is set up")
+        return
+
+    guild = message.guild
+    if guildprefs.get_guild_pref(guild.id, "twithelper") == True:
+        await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "twithelper", "enabled")
+    else:
+        await prompt_handler.start_prompt(client, message.author, message.guild, message.channel, "twithelper", "disabled")

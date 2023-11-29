@@ -72,8 +72,9 @@ async def on_message(message):
     if message.content.startswith(server_prefix):
         await command_handler.process_command(client, message, server_prefix)
 
-    #twitter_links = get_twitter_links(message.content)
-    #if twitter_links:
-        #await twitter_helper.send_helper(message, twitter_links)
+    if guildprefs.get_guild_pref(message.guild.id, "twithelper"):
+        twitter_links = get_twitter_links(message.content)
+        if twitter_links:
+            await twitter_helper.send_helper(message, twitter_links)
 
 client.run(botinfo.bot_token)

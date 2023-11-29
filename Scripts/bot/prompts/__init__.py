@@ -1,3 +1,4 @@
 from prompts.userlog_prompt import UserlogPrompt
 from prompts.help_prompt import HelpPrompt
 from prompts.pinboard_prompt import PinboardPrompt
+from prompts.twithelper_prompt import TwitterPrompt
