@@ -2,7 +2,7 @@ import discord
 import emoji
 
 import guildprefs
-
+import webhooker
 
 pin_emoji = "📌"
 
@@ -17,13 +17,12 @@ async def process_reaction(client, info):
         await pin_message(client, message.author, message.channel, message)
 
 async def pin_message(client, member, message_channel, message):
-    channel = await get_channel_if_valid_from_member(client, member)
+    channel = await get_channel_if_valid(client, message_channel)
     name = ""
     if (member.global_name is not None):
         name = member.global_name
     else:
         name = member.name
-    webhook = await channel.create_webhook(name=name)
 
     link = f"{message.jump_url}\n\n"
     content = f"{link}{message.content}"
@@ -34,16 +33,14 @@ async def pin_message(client, member, message_channel, message):
         file = await attachment.to_file()
         files.append(file)
 
-    await send_message(client, member, channel, webhook, content, files, message.embeds)
-    await webhook.delete()
+    await send_message(client, member, channel, content, files, message.embeds)
 
-async def send_message(client, member, channel, webhook, content, attachments, embeds):
-    try:
-        message = await webhook.send(content=content, avatar_url=str(member.display_avatar.url), files=attachments, embeds=embeds, wait=True)
-        await message.add_reaction(pin_emoji)
-    except:
-        owner = await client.fetch_user(channel.guild.owner_id)
-        await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
+async def send_message(client, member, channel, content, attachments, embeds):
+    #try:
+    message = await webhooker.send_webhook_as_user(client, channel, content, member, files=attachments, embeds=embeds, reaction=pin_emoji, wait=True)
+    #except:
+    #   owner = await client.fetch_user(channel.guild.owner_id)
+    #   await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
 
 def is_valid(client, info, message):
     if info.member.id == client.user.id:
@@ -87,8 +84,8 @@ async def no_channel_error(client, guild):
     guildprefs.edit_guild_pref(guild.id, "pinboard_channel", 0)
     guildprefs.edit_guild_pref(guild.id, "pin_activation_emoji", "")
 
-async def get_channel_if_valid_from_member(client, member):
-    guild = member.guild
+async def get_channel_if_valid(client, message_channel):
+    guild = message_channel.guild
     if guildprefs.get_guild_pref(guild.id, "pinboard"):
         channel_id = guildprefs.get_guild_pref(guild.id, "pinboard_channel")
         channel = guild.get_channel(int(channel_id))

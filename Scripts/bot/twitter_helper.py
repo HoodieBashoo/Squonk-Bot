@@ -1,21 +1,27 @@
 import discord
 from discord.ui import Button, View
 
+import webhooker
+
 button_time = 30
 default_edit = "fxtwitter"
 
-async def send_helper(message, twitter_links):
-    name = get_name(message)
-    content = f"**Sent by {name}**\n"
+async def send_helper(client, message, twitter_links):
+    #name = get_name(message)
+    #content = f"**Sent by {name}**\n"
+    content = ""
     for index, link in enumerate(twitter_links):
         if index > 0:
             content += f" {link}"
         else:
             content += f"{link}"
 
-    helper_message = await message.channel.send(content=content)
-    await edit_helper_message(helper_message, default_edit)
-    await helper_message.edit(view=twitter_buttons(message, helper_message))
+    edited_content = edit_helper_content(content, default_edit)
+    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=twitter_buttons(message), wait=True)
+    #helper_message = await message.channel.send(content=content)
+
+    #await edit_helper_message(helper_message, default_edit)
+    #await helper_message.edit(view=twitter_buttons(message, helper_message))
 
 def get_name(message):
     member = message.author
@@ -63,8 +69,7 @@ def get_twitter_links(content):
     else:
         return False
 
-async def edit_helper_message(message, replacement):
-    content = message.content
+def edit_helper_content(content, replacement):
     https_indices = get_link_indexes(content)
 
     count = 0
@@ -80,7 +85,7 @@ async def edit_helper_message(message, replacement):
         content = content[:starting_point] + replacement + content[starting_point:]
         count += 1
 
-    await message.edit(content=content)
+    return content
 
 def get_link_indexes(content):
     https_indices = []
@@ -106,9 +111,9 @@ def find_nth(content, to_find, start_index, occurence):
     return final_index
 
 class twitter_buttons(View):
-    def __init__(self, message, helper_message):
+    def __init__(self, message):#, helper_message):
         self.message = message
-        self.helper_message = helper_message
+        self.helper_message = None
         View.__init__(self, timeout=button_time)
 
     async def on_timeout(self):
@@ -117,30 +122,33 @@ class twitter_buttons(View):
         except:
             pass
 
+    def set_helper_message(self, message):
+        self.helper_message = message
+
     @discord.ui.button(label="vxtwitter", style=discord.ButtonStyle.secondary)
     async def vx_callback(self, interaction, button):
         if interaction.user == self.message.author:
-            await edit_helper_message(interaction.message, "vxtwitter")
+            await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "vxtwitter"))
         await interaction.response.defer()
 
     @discord.ui.button(label="fxtwitter", style=discord.ButtonStyle.secondary)
     async def fx_callback(self, interaction, button):
         if interaction.user == self.message.author:
-            await edit_helper_message(interaction.message, "fxtwitter")
+            await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "fxtwitter"))
         await interaction.response.defer()
 
     '''
     @discord.ui.button(label="fixupx", style=discord.ButtonStyle.secondary)
     async def fixupx_callback(self, interaction, button):
         if interaction.user == self.message.author:
-            await edit_helper_message(interaction.message, "fixupx")
+            await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "fixupx"))
         await interaction.response.defer()
         '''
 
     @discord.ui.button(label="direct", style=discord.ButtonStyle.secondary)
     async def direct_callback(self, interaction, button):
         if interaction.user == self.message.author:
-            await edit_helper_message(interaction.message, "twitter")
+            await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "twitter"))
         await interaction.response.defer()
 
     @discord.ui.button(style=discord.ButtonStyle.red, emoji="✖️")
