@@ -5,30 +5,32 @@ from prompts import prompt_urls
 
 def all_embeds():
     embeds = [
-        config_embed(),
-        utility_embed()
+        utility_embed(),
+        config_embed()
     ]
     return embeds
 
 def config_embed():
     embed = discord.Embed(
         title="Config Commands",
-        description="__prefix/updateprefix__\n"
-                    "- Change the prefix required for commands\n"
-                    "1 Argument for the prefix\n"
-                    "\n"
-                    "__userlog__\n"
-                    "- Configure a channel for updates on members joining and leaving\n"
-                    "0 Arguments\n"
-                    "\n"
-                    "__pinboard__\n"
-                    "- Configure a channel to send pinned messages to!\n"
-                    "- React with the specified emoji or use the built-in pin button to utilize this feature\n"
-                    "0 Arguments\n"
-                    "\n"
-                    "__twithelper__\n"
-                    "- Enable or disable an automatic twitter embed fixer\n"
-                    "0 Arguments",
+        description="""
+__prefix/updateprefix__
+- Change the prefix required for commands
+1 Argument for the prefix
+
+__userlog__
+- Configure a channel for updates on members joining and leaving
+0 Arguments
+
+__pinboard__
+- Configure a channel to send pinned messages to!
+- React with the specified emoji or use the built-in pin button to utilize this feature
+0 Arguments
+
+__twithelper__
+- Enable or disable an automatic twitter embed fixer
+0 Arguments
+        """,
         colour=discord.Colour.orange()
     )
     embed.set_thumbnail(url=prompt_urls.config_icon)
@@ -37,26 +39,24 @@ def config_embed():
 def utility_embed():
     embed = discord.Embed(
         title="Utility Commands",
-        description="__help__\n"
-                    "- Info on available commands\n"
-                    "1 Argument for the category\n"
-                    "0 Arguments for prompt\n"
-                    "\n"
-                    "__ping__\n"
-                    "- Check how quickly the bot responds!\n"
-                    "0 Arguments\n"
-                    "\n"
-                    "__info__\n"
-                    "- Info on the bot\n"
-                    "0 Arguments\n"
-                    "\n"
-                    "__shutdown__\n"
-                    "- Owner only\n"
-                    "0 Arguments\n"
-                    "\n"
-                    "__update__\n"
-                    "- Owner Only\n"
-                    "0 Arguments",
+        description="""
+__help__
+- List of available commands
+1 Argument for the category
+0 Arguments for prompt
+
+__info__
+- Info about me
+0 Arguments
+
+__preferences__
+- Current preferences in this server
+0 Arguments
+
+__ping__
+- See how quickly I respond!
+0 Arguments
+        """,
         colour=discord.Colour.orange()
     )
     embed.set_thumbnail(url=prompt_urls.utility_icon)

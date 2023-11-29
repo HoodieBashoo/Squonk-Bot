@@ -52,6 +52,18 @@ def get_guild_pref(guild_id, preference):
         print(f"Critical Error! File does not exist at {full_path}")
         return False
 
+def get_guild_prefs(guild_id):
+    full_path = get_full_path(guild_id)
+    try:
+        with open(full_path, "r") as file:
+            data = json.load(file)
+            return data
+
+        return True
+    except:
+        print(f"Critical Error! File does not exist at {full_path}")
+        return False
+
 def update_guild_pref_data(client):
     for guild in client.guilds:
         print(f"updating guild pref data on guild {guild.name}")

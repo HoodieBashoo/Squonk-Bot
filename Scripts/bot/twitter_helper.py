@@ -147,7 +147,7 @@ class twitter_buttons(View):
         if interaction.user == self.message.author:
             await self.helper_message.edit(content=edit_helper_content(interaction.message.content, "fixupx"))
         else:
-        await self.send_user_error(interaction)
+            await self.send_user_error(interaction)
         await interaction.response.defer()
         '''
 

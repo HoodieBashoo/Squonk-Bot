@@ -39,6 +39,9 @@ async def utility_commands(client, message, command, parameter):
             await commands.utility.info(message)
         case "updateprefs":
             await commands.utility.prefs_update(client, message)
+        case "preferences":
+            # TODO: Add to help command
+            await commands.utility.display_preferences(client, message)
 
 async def config_commands(client, message, command, parameter):
     # TODO: Add a permission system for specific commands,
