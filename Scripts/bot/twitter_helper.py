@@ -7,8 +7,6 @@ button_time = 30
 default_edit = "fxtwitter"
 
 async def send_helper(client, message, twitter_links):
-    #name = get_name(message)
-    #content = f"**Sent by {name}**\n"
     content = ""
     for index, link in enumerate(twitter_links):
         if index > 0:
@@ -17,11 +15,8 @@ async def send_helper(client, message, twitter_links):
             content += f"{link}"
 
     edited_content = edit_helper_content(content, default_edit)
-    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=twitter_buttons(message), wait=True)
-    #helper_message = await message.channel.send(content=content)
-
-    #await edit_helper_message(helper_message, default_edit)
-    #await helper_message.edit(view=twitter_buttons(message, helper_message))
+    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=twitter_buttons(message.author), wait=True)
+    await message.delete()
 
 def get_name(message):
     member = message.author
@@ -111,8 +106,8 @@ def find_nth(content, to_find, start_index, occurence):
     return final_index
 
 class twitter_buttons(View):
-    def __init__(self, message):#, helper_message):
-        self.message = message
+    def __init__(self, author):#, helper_message):
+        self.author = author
         self.helper_message = None
         View.__init__(self, timeout=button_time)
 
@@ -152,7 +147,7 @@ class twitter_buttons(View):
 
     @discord.ui.button(style=discord.ButtonStyle.red, emoji="✖️")
     async def delete_callback(self, interaction, button):
-        if interaction.user == self.message.author:
+        if interaction.user == self.author:
             await self.helper_message.delete()
         else:
             await self.send_user_error(interaction)
