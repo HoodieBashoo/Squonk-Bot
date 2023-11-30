@@ -2,11 +2,15 @@ import discord
 from discord.ui import Button, View
 
 import webhooker
+import guildprefs
 
 button_time = 30
 default_edit = "fxtwitter"
 
 async def send_helper(client, message, twitter_links):
+    if message.channel.id == int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel")):
+        return
+
     content = ""
     for index, link in enumerate(twitter_links):
         if index > 0:
