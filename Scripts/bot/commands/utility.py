@@ -108,7 +108,7 @@ async def display_preferences(client, message):
         colour=discord.Colour.orange()
     )
     embed.set_thumbnail(
-        url="https://cdn.discordapp.com/attachments/384064317722722305/1177015150721638531/SquonkBotAvatar.png?ex=6570f7c7&is=655e82c7&hm=0be0839cadeac70a2e80499f5e42a402147056fd71e0f853dc5516cccb952053&")
+        url="https://cdn.discordapp.com/attachments/384064317722722305/1179577092405473350/Preferences.png?ex=657a49c6&is=6567d4c6&hm=8b7794e03d1e039cd73f58ab7e0f1d9bae1b9aaedc5ddceb30ed8a5bceb8fcd2&")
     embed.add_field(name="Prefix", value=preferences["prefix"], inline=True)
     embed.add_field(name="Userlog", value=userlog_info, inline=True)
     embed.add_field(name="", value="", inline=False)
