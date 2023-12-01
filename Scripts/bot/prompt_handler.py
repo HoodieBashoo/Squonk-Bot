@@ -1,16 +1,8 @@
-from typing import NamedTuple
-
 from prompts import *
-#from prompts.userlog_prompt import UserlogPrompt
-#from prompts.help_prompt import HelpPrompt
-from timer import Timer
 
 active_prompts = []
 prompt_time = 5
 cancel_emoji = "❌"
-
-def reset():
-    active_prompts = []
 
 # TODO: Add a timer so that prompts end after 30 seconds of inactivity
 
@@ -27,7 +19,7 @@ async def start_prompt(client, author, guild, channel, prompt_type, start_condit
                     await channel.send(f"A {prompt_type} prompt is already running in this server")
                     return
 
-    new_prompt = await create_prompt(client, author, guild, channel, prompt_type, start_condition, end_prompt)
+    await create_prompt(client, author, guild, channel, prompt_type, start_condition, end_prompt)
 
 def find_prompt(channel_id):
     if len(active_prompts) <= 0:
@@ -60,29 +52,20 @@ async def reaction_cancel(prompt, user):
 async def end_prompt(channel):
     channel_id = channel.id
     prompt = find_prompt(channel_id)
-
     active_prompts.remove(prompt)
-    #await channel.send("Prompt ended")
-
-def get_prompt_data(prompt_type, prompt, answer):
-    match prompt_type:
-        case "userlog":
-            message, responses = userlog_prompt.get_prompt_data(prompt.prompt_state)
-            return message, responses
 
 async def create_prompt(client, author, guild, channel, prompt_type, start_condition, exit_func):
-    timer = Timer(prompt_time, channel, exit_func)
     prompt = None
 
     match prompt_type:
         case "userlog":
-            prompt = UserlogPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
+            prompt = UserlogPrompt(author, guild, channel, start_condition, exit_func, cancel_emoji)
         case "help":
-            prompt = HelpPrompt(author, guild, channel, timer, exit_func, cancel_emoji)
+            prompt = HelpPrompt(author, guild, channel, exit_func, cancel_emoji)
         case "pinboard":
-            prompt = PinboardPrompt(client, author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
+            prompt = PinboardPrompt(client, author, guild, channel, start_condition, exit_func, cancel_emoji)
         case "twithelper":
-            prompt = TwitterPrompt(author, guild, channel, timer, start_condition, exit_func, cancel_emoji)
+            prompt = TwitterPrompt(author, guild, channel, start_condition, exit_func, cancel_emoji)
 
     if prompt is not None:
         active_prompts.append(prompt)

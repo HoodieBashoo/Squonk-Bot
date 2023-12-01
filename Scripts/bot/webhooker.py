@@ -1,4 +1,4 @@
-import discord
+from discord.errors import Forbidden
 
 import guildprefs
 
@@ -17,7 +17,7 @@ async def get_webhook(client, channel):
     if sending_webhook is None:
         try:
             sending_webhook = await channel.create_webhook(name=default_name)
-        except:
+        except Forbidden:
             owner = await client.fetch_user(channel.guild.owner_id)
             await owner.send(
                 f"`{channel.guild.name}`: Failed to create webhook in {channel.name}.\nLikely culprits: No Permission")
@@ -59,8 +59,7 @@ async def send_webhook_as_user(client, channel, content, member, **kwargs):
     await send_webhook(client, channel, content, name=get_name(member), avatar_url=str(member.display_avatar.url), files=files, embeds=embeds, reaction=reaction, wait=wait, view=view)
 
 def get_name(member):
-    name = None
-    if (member.global_name is not None):
+    if member.global_name is not None:
         name = member.global_name
     else:
         name = member.name

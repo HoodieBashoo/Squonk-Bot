@@ -11,7 +11,7 @@ async def process_command(client, message, prefix):
     content = message.content
     # TODO: Find the space after the last space in the prefix if it has one
     next_space_index = content.find(" ")
-    if (next_space_index < 0):
+    if next_space_index < 0:
         command = content[len(prefix):]
         parameter = ""
     else:

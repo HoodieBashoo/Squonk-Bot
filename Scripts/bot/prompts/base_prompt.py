@@ -1,11 +1,10 @@
 from enum import Enum
 
-class BasePrompt():
-    def __init__(self, author, guild, channel, timer, exit_func, cancel_emoji):
+class BasePrompt:
+    def __init__(self, author, guild, channel, exit_func, cancel_emoji):
         self.author = author
         self.guild = guild
         self.channel = channel
-        self.timer = timer
         self.exit_func = exit_func
         self.cancel_emoji = cancel_emoji
         self.requested_responses = []
@@ -14,6 +13,7 @@ class BasePrompt():
         self.previous_message = None
 
     async def next_state(self, message, response):
+        # TODO: Clean this up so that there isn't any duplicate code across the prompts, since this entire method needs to be overwritten
         print("Unimplemented next_state")
 
         if response == "cancel" or response == "stop" or response == "end":
@@ -23,14 +23,17 @@ class BasePrompt():
             print("Starting timer")
         
         successful = False
-        currentState = self.state
+        current_state = self.state
 
-        # match statement for logic
+        match current_state:
+            case "example":
+                pass
 
         if successful:
             print("Resetting timer")
 
         if message is not None:
+            # TODO: Add a try except here for no permissions
             await message.delete()
 
     async def send_embeds(self, embeds):
@@ -48,7 +51,6 @@ class BasePrompt():
             await self.previous_message.edit(content=content)
             if response_type is self.ResponseType.End:
                 await self.previous_message.clear_reactions()
-            #await self.add_cancel_emoji(response_type)
         elif self.interrupted is True and self.previous_message is not None:
             await self.previous_message.delete()
             self.previous_message = await self.channel.send(content)

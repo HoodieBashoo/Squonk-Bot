@@ -1,15 +1,17 @@
 import sys
 sys.path.append("..")
 
+import discord
+
 import guildprefs
 from prompts.base_prompt import BasePrompt
 
 class UserlogPrompt(BasePrompt):
-    def __init__(self, author, guild, channel, timer, start_condition, exit_func, cancel_emoji):
-        BasePrompt.__init__(self, author, guild, channel, timer, exit_func, cancel_emoji)
-        if (start_condition == "enabled"):
+    def __init__(self, author, guild, channel, start_condition, exit_func, cancel_emoji):
+        BasePrompt.__init__(self, author, guild, channel, exit_func, cancel_emoji)
+        if start_condition == "enabled":
             self.state = 10
-        elif (start_condition == "disabled"):
+        elif start_condition == "disabled":
             self.state = 0
         self.final_prefs = {
             "userlog": False,
@@ -24,8 +26,9 @@ class UserlogPrompt(BasePrompt):
             print("Starting timer")
 
         successful = False
-        currentState = self.state
-        match currentState:
+        current_state = self.state
+
+        match current_state:
             # PURPOSE: USERLOG NOT YET ENABLED
             case 0:
                 self.requested_responses = ["y", "n"]

@@ -1,5 +1,5 @@
 import discord
-from discord.ui import Button, View
+from discord.ui import View
 
 import webhooker
 import guildprefs
@@ -19,30 +19,8 @@ async def send_helper(client, message, twitter_links):
             content += f"{link}"
 
     edited_content = edit_helper_content(content, default_edit)
-    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=twitter_buttons(message.author), wait=True)
+    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author), wait=True)
     await message.delete()
-
-def get_name(message):
-    member = message.author
-    name = None
-    if (member.global_name is not None):
-        name = member.global_name
-    else:
-        name = member.name
-    return name
-
-def get_credit_embed(message):
-    embed = discord.Embed(colour=discord.Color.from_rgb(r=0, g=168,b= 252))
-
-    member = message.author
-    name = None
-    if (member.global_name is not None):
-        name = member.global_name
-    else:
-        name = member.name
-
-    embed.set_author(name=f"Sent by {name}", icon_url=str(member.display_avatar.url))
-    return embed
 
 def get_twitter_links(content):
     https_indices = get_link_indexes(content)
@@ -109,8 +87,9 @@ def find_nth(content, to_find, start_index, occurence):
         current_amount += 1
     return final_index
 
-class twitter_buttons(View):
-    def __init__(self, author):#, helper_message):
+# TODO: Buttons are now giving various errors if another person interacts with them
+class TwitterButtons(View):
+    def __init__(self, author):
         self.author = author
         self.helper_message = None
         View.__init__(self, timeout=button_time)
@@ -118,8 +97,8 @@ class twitter_buttons(View):
     async def on_timeout(self):
         try:
             await self.helper_message.edit(view=None)
-        except:
-            pass
+        except AttributeError:
+            print("Helper message does not exist, could not remove twitter helper buttons")
 
     def set_helper_message(self, message):
         self.helper_message = message

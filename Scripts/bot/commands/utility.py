@@ -1,10 +1,9 @@
 import subprocess
-import os
-import time, datetime
+import time
+import datetime
 import sys
 sys.path.append("..")
 
-import emoji
 import discord
 
 import botinfo
@@ -12,6 +11,8 @@ import guildprefs
 import prompt_handler
 from prompts import helpinfo
 
+
+start_time = 0
 
 async def shutdown(client, message):
     if message.author.id == botinfo.owner_id:
@@ -34,8 +35,6 @@ async def help(client, message, parameter):
                 await message.channel.send(embed=helpinfo.utility_embed())
 
 async def ping(client, message):
-    colour = None
-    print(round(client.latency * 1000))
     if round(client.latency * 1000) <= 150:
         colour = discord.Colour.green()
     elif round(client.latency * 1000) <= 200:
@@ -91,7 +90,7 @@ async def display_preferences(client, message):
     if preferences["pinboard"]:
         try:
             emoji_object = client.get_emoji(int(preferences["pin_activation_emoji"]))
-        except:
+        except ValueError:
             emoji_object = preferences["pin_activation_emoji"]
         pinboard_info = f"Enabled in <#{preferences['pinboard_channel']}> with {emoji_object}"
     else:
@@ -118,17 +117,15 @@ async def display_preferences(client, message):
     await message.channel.send(embed=embed)
 
 async def prefs_update(client, message):
-    if (message.author.id != botinfo.owner_id):
+    if message.author.id != botinfo.owner_id:
         return
     guildprefs.update_guild_pref_data(client)
 
-def on_start(time):
+def on_start(t):
     global start_time
-    start_time = time
+    start_time = t
 
 def get_uptime():
-    current_time = time.time()
-    difference = int(round(current_time - start_time))
     uptime = datetime.timedelta(seconds=int(round(time.time() - start_time)))
     days, hours, minutes = uptime.days, uptime.seconds // 3600, uptime.seconds % 3600 // 60
     seconds = uptime.seconds - hours * 3600 - minutes * 60

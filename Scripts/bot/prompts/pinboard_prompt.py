@@ -5,12 +5,12 @@ from prompts.base_prompt import BasePrompt
 
 
 class PinboardPrompt(BasePrompt):
-    def __init__(self, client, author, guild, channel, timer, start_condition, exit_func, cancel_emoji):
-        BasePrompt.__init__(self, author, guild, channel, timer, exit_func, cancel_emoji)
+    def __init__(self, client, author, guild, channel, start_condition, exit_func, cancel_emoji):
+        BasePrompt.__init__(self, author, guild, channel, exit_func, cancel_emoji)
         self.client = client
-        if (start_condition == "enabled"):
+        if start_condition == "enabled":
             self.state = 10
-        elif (start_condition == "disabled"):
+        elif start_condition == "disabled":
             self.state = 0
         self.final_prefs = {
             "pinboard": False,
@@ -26,8 +26,9 @@ class PinboardPrompt(BasePrompt):
             print("Starting timer")
 
         successful = False
-        currentState = self.state
-        match currentState:
+        current_state = self.state
+
+        match current_state:
             # PURPOSE: Pinboard NOT YET ENABLED
             case 0:
                 self.requested_responses = ["y", "n"]
@@ -68,7 +69,7 @@ class PinboardPrompt(BasePrompt):
                         await self.close_prompt()
                     else:
                         await self.next_message("Err I don't think I know that emoji", self.ResponseType.Normal)
-                except:
+                except ValueError:
                     if emoji.is_emoji(response):
                         self.final_prefs["pin_activation_emoji"] = response
                         self.set_prefs()
@@ -101,12 +102,6 @@ class PinboardPrompt(BasePrompt):
 
         if message is not None:
             await message.delete()
-
-    def detect_emoji(self, text):
-        for emoji in UNICODE_EMOJI:
-            if text == emoji:
-                return True
-        return False
 
     def set_prefs(self):
         guildprefs.edit_guild_pref(self.guild.id, "pinboard", self.final_prefs["pinboard"])

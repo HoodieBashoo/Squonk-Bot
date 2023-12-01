@@ -6,6 +6,7 @@ import webhooker
 
 pin_emoji = "📌"
 
+# TODO: Define the exceptions so I can send better errors to the owner
 async def process_reaction(client, info):
     message = await client.get_channel(info.channel_id).fetch_message(info.message_id)
     if not is_valid(client, info, message):
@@ -18,11 +19,6 @@ async def process_reaction(client, info):
 
 async def pin_message(client, member, message_channel, message):
     channel = await get_channel_if_valid(client, message_channel)
-    name = ""
-    if (member.global_name is not None):
-        name = member.global_name
-    else:
-        name = member.name
 
     link = f"{message.jump_url}\n\n"
     content = f"{link}{message.content}"
@@ -36,11 +32,11 @@ async def pin_message(client, member, message_channel, message):
     await send_message(client, member, channel, content, files, message.embeds)
 
 async def send_message(client, member, channel, content, attachments, embeds):
-    #try:
-    message = await webhooker.send_webhook_as_user(client, channel, content, member, files=attachments, embeds=embeds, reaction=pin_emoji, wait=True)
-    #except:
-    #   owner = await client.fetch_user(channel.guild.owner_id)
-    #   await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
+    try:
+        await webhooker.send_webhook_as_user(client, channel, content, member, files=attachments, embeds=embeds, reaction=pin_emoji, wait=True)
+    except:
+        owner = await client.fetch_user(channel.guild.owner_id)
+        await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
 
 def is_valid(client, info, message):
     if info.member.id == client.user.id:
@@ -68,11 +64,11 @@ def is_valid(client, info, message):
     return True
 
 def get_pin_emoji_object(client, message):
-    emoji = guildprefs.get_guild_pref(message.guild.id, "pin_activation_emoji")
+    pin_activation_emoji = guildprefs.get_guild_pref(message.guild.id, "pin_activation_emoji")
     try:
-        pin_emoji_object = client.get_emoji(int(emoji))
-    except:
-        pin_emoji_object = emoji
+        pin_emoji_object = client.get_emoji(int(pin_activation_emoji))
+    except ValueError:
+        pin_emoji_object = pin_activation_emoji
 
     return pin_emoji_object
 

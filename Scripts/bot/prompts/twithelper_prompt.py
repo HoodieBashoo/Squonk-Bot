@@ -5,11 +5,11 @@ import guildprefs
 from prompts.base_prompt import BasePrompt
 
 class TwitterPrompt(BasePrompt):
-    def __init__(self, author, guild, channel, timer, start_condition, exit_func, cancel_emoji):
-        BasePrompt.__init__(self, author, guild, channel, timer, exit_func, cancel_emoji)
-        if (start_condition == "enabled"):
+    def __init__(self, author, guild, channel, start_condition, exit_func, cancel_emoji):
+        BasePrompt.__init__(self, author, guild, channel, exit_func, cancel_emoji)
+        if start_condition == "enabled":
             self.state = 10
-        elif (start_condition == "disabled"):
+        elif start_condition == "disabled":
             self.state = 0
 
     async def next_state(self, message, response):
@@ -20,9 +20,9 @@ class TwitterPrompt(BasePrompt):
             print("Starting timer")
 
         successful = False
-        currentState = self.state
+        current_state = self.state
 
-        match currentState:
+        match current_state:
             case 0:
                 self.requested_responses = ["y", "n"]
                 self.state = 1

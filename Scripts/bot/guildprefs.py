@@ -1,7 +1,6 @@
 import os
 import os.path
 import json
-from pathlib import Path
 
 from botinfo import guild_data_path
 
@@ -34,11 +33,8 @@ def edit_guild_pref(guild_id, preference, new_data):
             file.seek(0)
             json.dump(data, file, indent=4)
             file.truncate()
-
-        return True
-    except:
+    except FileNotFoundError:
         print(f"Critical Error! File does not exist at {full_path}")
-        return False
 
 def get_guild_pref(guild_id, preference):
     full_path = get_full_path(guild_id)
@@ -46,9 +42,7 @@ def get_guild_pref(guild_id, preference):
         with open(full_path, "r") as file:
             data = json.load(file)
             return data[preference]
-
-        return True
-    except:
+    except FileNotFoundError:
         print(f"Critical Error! File does not exist at {full_path}")
         return False
 
@@ -58,9 +52,7 @@ def get_guild_prefs(guild_id):
         with open(full_path, "r") as file:
             data = json.load(file)
             return data
-
-        return True
-    except:
+    except FileNotFoundError:
         print(f"Critical Error! File does not exist at {full_path}")
         return False
 
@@ -72,7 +64,6 @@ def update_guild_pref_data(client):
             with open(full_path, "r+") as file:
                 data = json.load(file)
 
-                found_pref = False
                 for default_pref in default_prefs:
                     found_pref = False
                     for pref in data:
@@ -86,7 +77,7 @@ def update_guild_pref_data(client):
                 json.dump(data, file, indent=4)
                 file.truncate()
                 print("Successfully updated")
-        except:
+        except FileNotFoundError:
             print(f"Could not find file for {guild.name} while updating guild pref data. Creating...")
             initialize_guild(guild.id)
 

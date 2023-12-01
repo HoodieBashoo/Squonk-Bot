@@ -1,3 +1,4 @@
+from discord.errors import Forbidden
 import guildprefs
 
 async def member_joined(client, member):
@@ -26,7 +27,7 @@ async def member_unbanned(client, guild, member):
 async def send_message(client, channel, content):
     try:
         await channel.send(content)
-    except:
+    except Forbidden:
         owner = await client.fetch_user(channel.guild.owner_id)
         await owner.send(f"`{channel.guild.name}`: Failed to send userlog message in the specified channel.\nLikely culprit: No Permission")
 

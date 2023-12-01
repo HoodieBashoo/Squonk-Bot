@@ -2,8 +2,8 @@ from prompts import helpinfo
 from prompts.base_prompt import BasePrompt
 
 class HelpPrompt(BasePrompt):
-    def __init__(self, author, guild, channel, timer, exit_func, cancel_emoji):
-        BasePrompt.__init__(self, author, guild, channel, timer, exit_func, cancel_emoji)
+    def __init__(self, author, guild, channel, exit_func, cancel_emoji):
+        BasePrompt.__init__(self, author, guild, channel, exit_func, cancel_emoji)
 
     async def next_state(self, message, response):
         if response == "cancel" or response == "stop" or response == "end":
@@ -13,8 +13,8 @@ class HelpPrompt(BasePrompt):
             print("Starting timer")
 
         successful = False
-        currentState = self.state
-        match currentState:
+        current_state = self.state
+        match current_state:
             case 0:
                 self.requested_responses = ["all", "config", "utility"]
                 self.state = 1

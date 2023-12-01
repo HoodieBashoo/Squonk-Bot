@@ -19,8 +19,6 @@ async def on_ready():
     for guild in client.guilds:
         guildprefs.initialize_guild(guild.id)
 
-    # TODO: Not sure if this is necessary, further testing required
-    prompt_handler.reset()
     command_handler.on_start(time.time())
     guildprefs.update_guild_pref_data(client)
 
