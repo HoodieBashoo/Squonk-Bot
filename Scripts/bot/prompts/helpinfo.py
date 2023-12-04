@@ -22,7 +22,7 @@ __userlog__
 
 __pinboard__
 - Configure a channel to send pinned messages to!
-- React with the specified emoji or use the built-in pin button to utilize this feature
+- React with the specified emoji to utilize this feature
 0 Arguments
 
 __twithelper__
