@@ -58,7 +58,8 @@ async def info(message):
     creation_date = datetime.datetime(2023, 10, 16, 10, 28)
     embed = discord.Embed(
         title="Info",
-        description=botinfo.description,
+        description=f"{botinfo.description}\n"
+                    f"Image assets were made by the amazing Lync5",
         colour=discord.Colour.orange()
     )
     embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/384064317722722305/1177015150721638531/SquonkBotAvatar.png?ex=6570f7c7&is=655e82c7&hm=0be0839cadeac70a2e80499f5e42a402147056fd71e0f853dc5516cccb952053&")

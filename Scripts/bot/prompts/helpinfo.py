@@ -44,7 +44,7 @@ __help__
 0 Arguments for prompt
 
 __info__
-- Info about me
+- General info and credits
 0 Arguments
 
 __preferences__
