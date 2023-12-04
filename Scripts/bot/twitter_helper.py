@@ -4,7 +4,7 @@ from discord.ui import View
 import webhooker
 import guildprefs
 
-button_time = 30
+button_time = 240
 default_edit = "fxtwitter"
 
 async def send_helper(client, message, twitter_links):
