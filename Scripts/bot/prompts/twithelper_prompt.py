@@ -42,7 +42,7 @@ class TwitterPrompt(BasePrompt):
                 if response.isdigit():
                     guildprefs.edit_guild_pref(self.guild.id, "twithelper", self.final_prefs["twithelper"])
                     guildprefs.edit_guild_pref(self.guild.id, "twitter_button_time", int(response))
-                    await self.next_message("Successfully enabled twithelper!", self.ResponseType.End)
+                    await self.next_message("Successfully enabled the twitter helper!", self.ResponseType.End)
                     await self.close_prompt()
                 else:
                     await self.next_message("Not a number! Please send a number of seconds for the helper buttons", self.ResponseType.Normal)
