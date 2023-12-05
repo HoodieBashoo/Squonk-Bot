@@ -10,12 +10,15 @@ async def send_helper(client, message, twitter_links):
     if message.channel.id == int(guildprefs.get_guild_pref(message.guild.id, "pinboard_channel")):
         return
 
+    ''' For use in the case that you want the message to only post the links in the message
     content = ""
     for index, link in enumerate(twitter_links):
         if index > 0:
             content += f" {link}"
         else:
             content += f"{link}"
+    '''
+    content = message.content
 
     edited_content = edit_helper_content(content, default_edit)
     await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author, message.guild.id), wait=True)
