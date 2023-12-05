@@ -25,9 +25,7 @@ class PinboardPrompt(BasePrompt):
         if response == "":
             print("Starting timer")
 
-        successful = False
         current_state = self.state
-
         match current_state:
             # PURPOSE: Pinboard NOT YET ENABLED
             case 0:
@@ -39,7 +37,6 @@ class PinboardPrompt(BasePrompt):
                     self.requested_responses = []
                     self.state = 2
                     await self.next_message("Send the ID of the channel you want to pin messages to", self.ResponseType.Normal)
-                    successful = True
                 elif response == self.requested_responses[1]:
                     await self.cancel_prompt()
             case 2:
@@ -50,10 +47,8 @@ class PinboardPrompt(BasePrompt):
                         self.state = 3
                         self.requested_responses = []
                         await self.next_message("And what emoji do you want to use to pin messages?", self.ResponseType.Normal)
-                        successful = True
                     else:
                         await self.next_message("Couldn't find a channel with that ID", self.ResponseType.Normal)
-                        successful = True
                 else:
                     await self.next_message("Not an ID! Please send a channel ID", self.ResponseType.Normal)
             case 3:
@@ -88,7 +83,6 @@ class PinboardPrompt(BasePrompt):
                     self.requested_responses = []
                     self.state = 2
                     await self.next_message("Righty then, send a new channel ID", self.ResponseType.Normal)
-                    successful = True
                 elif response == self.requested_responses[1]:
                     self.final_prefs["pinboard"] = False
                     self.final_prefs["pinboard_channel"] = 0
@@ -96,9 +90,6 @@ class PinboardPrompt(BasePrompt):
                     guildprefs.edit_guild_pref(self.guild.id, "pinboard_channel", self.final_prefs["pinboard_channel"])
                     await self.next_message("Successfully disabled pinboard", self.ResponseType.End)
                     await self.close_prompt()
-
-        if successful:
-            print("Resetting timer")
 
         if message is not None:
             await message.delete()

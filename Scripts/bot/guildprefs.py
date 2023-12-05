@@ -12,7 +12,8 @@ default_prefs = {
     "pinboard": False,
     "pinboard_channel": 0,
     "pin_activation_emoji": "",
-    "twithelper": False
+    "twithelper": False,
+    "twitter_button_time": 0
 }
 
 def initialize_guild(guild_id):

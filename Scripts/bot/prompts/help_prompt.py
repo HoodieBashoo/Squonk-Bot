@@ -12,7 +12,6 @@ class HelpPrompt(BasePrompt):
         if response == "":
             print("Starting timer")
 
-        successful = False
         current_state = self.state
         match current_state:
             case 0:
@@ -34,9 +33,6 @@ class HelpPrompt(BasePrompt):
                     await self.close_prompt()
                 else:
                     await self.next_message("Not a category :( (all/config/utility)", self.ResponseType.Normal)
-
-        if successful:
-            print("Resetting timer")
 
         if message is not None:
             await message.delete()

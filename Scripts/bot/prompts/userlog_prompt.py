@@ -25,9 +25,7 @@ class UserlogPrompt(BasePrompt):
         if response == "":
             print("Starting timer")
 
-        successful = False
         current_state = self.state
-
         match current_state:
             # PURPOSE: USERLOG NOT YET ENABLED
             case 0:
@@ -39,7 +37,6 @@ class UserlogPrompt(BasePrompt):
                     self.requested_responses = []
                     self.state = 2
                     await self.next_message("Send the ID for the channel you wish to use", self.ResponseType.Normal)
-                    successful = True
                 elif response == self.requested_responses[1]:
                     await self.cancel_prompt()
             case 2:
@@ -53,7 +50,6 @@ class UserlogPrompt(BasePrompt):
                         await self.close_prompt()
                     else:
                         await self.next_message("Couldn't find a channel with that ID", self.ResponseType.Normal)
-                        successful = True
                 else:
                     await self.next_message("Not an ID! Please send a channel ID", self.ResponseType.Normal)
 
@@ -67,7 +63,6 @@ class UserlogPrompt(BasePrompt):
                     self.requested_responses = []
                     self.state = 2
                     await self.next_message("Oke, send a new channel ID", self.ResponseType.Normal)
-                    successful = True
                 elif response == self.requested_responses[1]:
                     self.final_prefs["userlog"] = False
                     self.final_prefs["userlog_channel"] = 0
@@ -75,9 +70,6 @@ class UserlogPrompt(BasePrompt):
                     guildprefs.edit_guild_pref(self.guild.id, "userlog_channel", self.final_prefs["userlog_channel"])
                     await self.next_message("Successfully disabled userlog", self.ResponseType.End)
                     await self.close_prompt()
-
-        if successful:
-            print("Resetting timer")
 
         if message is not None:
             await message.delete()

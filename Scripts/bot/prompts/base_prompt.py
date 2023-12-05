@@ -21,16 +21,11 @@ class BasePrompt:
             return
         if response == "":
             print("Starting timer")
-        
-        successful = False
-        current_state = self.state
 
+        current_state = self.state
         match current_state:
             case "example":
                 pass
-
-        if successful:
-            print("Resetting timer")
 
         if message is not None:
             # TODO: Add a try except here for no permissions
@@ -65,16 +60,11 @@ class BasePrompt:
             await self.previous_message.add_reaction(self.cancel_emoji)
 
     async def cancel_prompt(self):
-        self.stop_timer()
         await self.next_message("Prompt cancelled", self.ResponseType.End)
         await self.exit_func(self.channel)
 
     async def close_prompt(self):
-        self.stop_timer()
         await self.exit_func(self.channel)
-
-    def stop_timer(self):
-        print("Stopping timer")
 
     def interrupt(self):
         self.interrupted = True

@@ -4,7 +4,6 @@ from discord.ui import View
 import webhooker
 import guildprefs
 
-button_time = 240
 default_edit = "fxtwitter"
 
 async def send_helper(client, message, twitter_links):
@@ -19,7 +18,7 @@ async def send_helper(client, message, twitter_links):
             content += f"{link}"
 
     edited_content = edit_helper_content(content, default_edit)
-    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author), wait=True)
+    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author, message.guild.id), wait=True)
     await message.delete()
 
 def get_twitter_links(content):
@@ -89,10 +88,10 @@ def find_nth(content, to_find, start_index, occurence):
 
 # TODO: Buttons are now giving various errors if another person interacts with them
 class TwitterButtons(View):
-    def __init__(self, author):
+    def __init__(self, author, guild_id):
         self.author = author
         self.helper_message = None
-        View.__init__(self, timeout=button_time)
+        View.__init__(self, timeout=guildprefs.get_guild_pref(guild_id, "twitter_button_time"))
 
     async def on_timeout(self):
         try:
