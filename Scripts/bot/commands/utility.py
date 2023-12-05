@@ -98,7 +98,7 @@ async def display_preferences(client, message):
         pinboard_info = f"Disabled"
 
     if preferences["twithelper"]:
-        twitter_info = "Active"
+        twitter_info = f"Active with buttons visible for {preferences['twitter_button_time']} seconds"
     else:
         twitter_info = "Inactive"
 
