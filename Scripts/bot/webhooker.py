@@ -1,3 +1,4 @@
+from discord import ChannelType
 from discord.errors import Forbidden
 
 import guildprefs
@@ -5,6 +6,8 @@ import guildprefs
 default_name = "Squonk Webhook"
 
 async def get_webhook(client, channel):
+    if channel.type == ChannelType.public_thread or channel.type == ChannelType.private_thread:
+        channel = channel.parent
     webhooks = await channel.webhooks()
     sending_webhook = None
 
@@ -32,6 +35,7 @@ async def send_webhook(client, channel, content, **kwargs):
     wait = kwargs.get("wait", False)
     reaction = kwargs.get("reaction", None)
     view = kwargs.get("view", None)
+    thread = kwargs.get("thread", None)
 
     webhook = await get_webhook(client, channel)
     if webhook is None:
@@ -41,7 +45,10 @@ async def send_webhook(client, channel, content, **kwargs):
         if embed.type != "rich":
             embeds.remove(embed)
 
-    message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait)
+    if thread is not None:
+        message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait, thread=thread)
+    else:
+        message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait)
 
     if reaction is not None:
         await message.add_reaction(reaction)
@@ -52,13 +59,14 @@ async def send_webhook(client, channel, content, **kwargs):
     return message
 
 async def send_webhook_as_user(client, channel, content, member, **kwargs):
-    files = kwargs.get("files", None)
-    embeds = kwargs.get("embeds", None)
-    wait = kwargs.get("wait", bool)
+    files = kwargs.get("files", ())
+    embeds = kwargs.get("embeds", ())
+    wait = kwargs.get("wait", False)
     reaction = kwargs.get("reaction", None)
     view = kwargs.get("view", None)
+    thread = kwargs.get("thread", None)
 
-    await send_webhook(client, channel, content, name=get_name(member), avatar_url=str(member.display_avatar.url), files=files, embeds=embeds, reaction=reaction, wait=wait, view=view)
+    await send_webhook(client, channel, content, name=get_name(member), avatar_url=str(member.display_avatar.url), files=files, embeds=embeds, reaction=reaction, wait=wait, view=view, thread=thread)
 
 def get_name(member):
     if member.global_name is not None:
