@@ -37,9 +37,10 @@ async def send_webhook(client, channel, content, **kwargs):
     if webhook is None:
         return
 
-    if embeds or files is None:
-        files = ()
+    if embeds is None:
         embeds = ()
+    if files is None:
+        files = ()
     message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait)
 
     if reaction is not None:

@@ -21,8 +21,22 @@ async def send_helper(client, message, twitter_links):
     content = message.content
 
     edited_content = edit_helper_content(content, default_edit)
-    await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author, message.guild.id), wait=True)
+    try:
+        await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author, message.guild.id), wait=True)
+    # If message is in a thread or webhook can't be created
+    except AttributeError:
+        view = TwitterButtons(message.author, message.guild.id)
+        new_content = f"**Sent by {get_name(message.author)}**\n{edited_content}"
+        helper = await message.channel.send(content=new_content, view=view)
+        view.set_helper_message(helper)
     await message.delete()
+
+def get_name(member):
+    if member.global_name is not None:
+        name = member.global_name
+    else:
+        name = member.name
+    return name
 
 def get_twitter_links(content):
     https_indices = get_link_indexes(content)
