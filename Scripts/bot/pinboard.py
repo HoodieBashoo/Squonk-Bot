@@ -32,11 +32,11 @@ async def pin_message(client, member, message_channel, message):
     await send_message(client, member, channel, content, files, message.embeds)
 
 async def send_message(client, member, channel, content, attachments, embeds):
-    #try:
-    await webhooker.send_webhook_as_user(client, channel, content, member, files=attachments, embeds=embeds, reaction=pin_emoji, wait=True)
-    #except:
-    #    owner = await client.fetch_user(channel.guild.owner_id)
-    #   await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
+    try:
+        await webhooker.send_webhook_as_user(client, channel, content, member, files=attachments, embeds=embeds, reaction=pin_emoji, wait=True)
+    except:
+        owner = await client.fetch_user(channel.guild.owner_id)
+        await owner.send(f"`{channel.guild.name}`: Failed to send pinned message in the specified channel.\nLikely culprits: No Permission, File too large, File invalid")
 
 def is_valid(client, info, message):
     if info.member.id == client.user.id:
