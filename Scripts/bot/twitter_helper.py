@@ -22,6 +22,7 @@ async def send_helper(client, message, twitter_links):
 
     edited_content = edit_helper_content(content, default_edit)
     try:
+        # TODO to fix the error underneath, specify thread=
         await webhooker.send_webhook_as_user(client, message.channel, edited_content, message.author, view=TwitterButtons(message.author, message.guild.id), wait=True)
     # If message is in a thread or webhook can't be created
     except AttributeError:

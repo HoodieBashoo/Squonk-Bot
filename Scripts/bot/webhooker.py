@@ -25,11 +25,11 @@ async def get_webhook(client, channel):
     return sending_webhook
 
 async def send_webhook(client, channel, content, **kwargs):
-    name = kwargs.get("name", str)
-    avatar_url = kwargs.get("avatar_url", str)
-    files = kwargs.get("files", None)
-    embeds = kwargs.get("embeds", None)
-    wait = kwargs.get("wait", bool)
+    name = kwargs.get("name", "")
+    avatar_url = kwargs.get("avatar_url", "")
+    files = kwargs.get("files", ())
+    embeds = kwargs.get("embeds", ())
+    wait = kwargs.get("wait", False)
     reaction = kwargs.get("reaction", None)
     view = kwargs.get("view", None)
 
@@ -37,10 +37,10 @@ async def send_webhook(client, channel, content, **kwargs):
     if webhook is None:
         return
 
-    if embeds is None:
-        embeds = ()
-    if files is None:
-        files = ()
+    for embed in embeds:
+        if embed.type != "rich":
+            embeds.remove(embed)
+
     message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait)
 
     if reaction is not None:
@@ -48,6 +48,7 @@ async def send_webhook(client, channel, content, **kwargs):
     if view is not None and wait is True:
         await message.edit(view=view)
         view.set_helper_message(message)
+
     return message
 
 async def send_webhook_as_user(client, channel, content, member, **kwargs):
