@@ -58,13 +58,19 @@ async def on_raw_reaction_add(info):
 async def on_message(message):
     if message.author.id == client.user.id:
         return
-    if client.user.mentioned_in(message):
-        await message.channel.send(botinfo.description + f" My prefix is `{guildprefs.get_guild_pref(message.guild.id, 'prefix')}`")
-        return
 
     prompt = prompt_handler.find_prompt(message.channel.id)
     if prompt is not None:
         await prompt_handler.process_satisfaction(prompt, message)
+        return
+
+    if client.user.mentioned_in(message):
+        if message.mention_everyone:
+            return
+        if message.reference is not None:
+            return
+        await message.channel.send(botinfo.description + f" My prefix is `{guildprefs.get_guild_pref(message.guild.id, 'prefix')}`")
+        return
 
     server_prefix = guildprefs.get_guild_pref(message.guild.id, "prefix")
     if message.content.startswith(server_prefix):
