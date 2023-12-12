@@ -1,4 +1,5 @@
 import discord
+from discord import ChannelType
 from discord.ui import View
 
 import webhooker
@@ -22,7 +23,7 @@ async def send_helper(client, message, twitter_links):
 
     edited_content = edit_helper_content(content, default_edit)
 
-    if message.channel.type == "public_thread" or "private_thread":
+    if message.channel.type == ChannelType.public_thread or message.channel.type == ChannelType.private_thread:
         thread = message.channel
     else:
         thread = None

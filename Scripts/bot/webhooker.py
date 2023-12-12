@@ -45,6 +45,7 @@ async def send_webhook(client, channel, content, **kwargs):
         if embed.type != "rich":
             embeds.remove(embed)
 
+    print(thread)
     if thread is not None:
         message = await webhook.send(content=content, username=name, avatar_url=avatar_url, files=files, embeds=embeds, wait=wait, thread=thread)
     else:
