@@ -56,7 +56,10 @@ async def get_channel_if_valid_from_member(client, member):
         return channel
 
 def get_member_identification(member):
-    if member.name == member.global_name.lower():
-        return f"{member.name}"
-    else:
-        return f"{member.name} ({member.global_name})"
+    try:
+        if member.name == member.global_name.lower():
+            return f"{member.name}"
+        else:
+            return f"{member.name} ({member.global_name})"
+    except AttributeError:
+        return f"{member.name}#{member.discriminator}"
